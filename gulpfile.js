@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var watch = require('gulp-watch');
+var babel = require('gulp-babel');
 
 var paths = {
 	javascript: [
@@ -12,9 +13,15 @@ var paths = {
 };
 
 
-// Concats all JavaScript files
+// JavaScript tasks
 gulp.task('javascript', function () {
 	return gulp.src(paths.javascript)
+		.pipe(babel({
+				presets: ['es2015']
+		}))
+		.on('error', function (error) {
+			console.log(error);
+		})
 		.pipe(concat('all.js'))
 		.pipe(gulp.dest('build'));
 });
