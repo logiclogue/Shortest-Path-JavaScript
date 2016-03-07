@@ -1,38 +1,43 @@
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Canvas = function () {
-	function Canvas() {
-		_classCallCheck(this, Canvas);
+class Canvas {
+	static init() {
+		this.c = document.getElementById('main-canvas');
+		this.c.width = window.innerWidth;
+		this.c.height = window.innerHeight;
+		this.ctx = this.c.getContext('2d');
+		this.width = this.c.width;
+		this.height = this.c.height;
+	}
+}
+class Dijkstra {}
+class Graph {
+	addNode(name, edges) {
+		this.nodes[name] = {
+			val: 1,
+			edges: edges || {}
+		};
 	}
 
-	_createClass(Canvas, null, [{
-		key: 'init',
-		value: function init() {
-			this.c = document.getElementById('main-canvas');
-			this.c.width = window.innerWidth;
-			this.c.height = window.innerHeight;
-			this.ctx = this.c.getContext('2d');
-			this.width = this.c.width;
-			this.height = this.c.height;
-		}
-	}]);
+	constructor() {
+		this.nodes = {};
+		this.startNodes = [];
+		this.endNodes = [];
+	}
+}
+class Main {
+	constructor() {
+		var graph = new Graph();
 
-	return Canvas;
-}();
-"use strict";
+		graph.addNode('Jordan', [{ node: '1', distance: 10 }, { node: '2', distance: 10 }]);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+		console.log(graph.nodes);
 
-var Main = function Main() {
-	_classCallCheck(this, Main);
-
-	Canvas.init();
-};
+		Canvas.init();
+	}
+}
 
 window.onload = function () {
 	var main = new Main();
 };
+class Map {
+	constructor() {}
+}

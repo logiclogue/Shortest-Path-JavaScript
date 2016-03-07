@@ -16,9 +16,7 @@ var paths = {
 // JavaScript tasks
 gulp.task('javascript', function () {
 	return gulp.src(paths.javascript)
-		.pipe(babel({
-				presets: ['es2015']
-		}))
+		.pipe(babel())
 		.on('error', function (error) {
 			console.log(error);
 		})
