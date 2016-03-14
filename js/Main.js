@@ -2,10 +2,9 @@ class Main
 {
 	constructor() {
 		var graph = new Graph();
+		var map = new Map();
 
-		graph.addNode('Jordan', [{node: '1', distance: 10}, {node: '2', distance: 10}]);
-
-		console.log(graph.nodes);
+		map.convertToGraph(graph);
 
 		Canvas.init();
 	}

@@ -7,6 +7,12 @@ class Graph
 		}
 	}
 
+	addStartNode(name) {
+		this.startNodes.push(this.nodes[name]);
+		this.endNodes.push(this.nodes[name]);
+	}
+	
+
 	constructor() {
 		this.nodes = {};
 		this.startNodes = [];
