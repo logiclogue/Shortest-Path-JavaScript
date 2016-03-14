@@ -19,6 +19,8 @@ gulp.task('javascript', function () {
 		.pipe(babel())
 		.on('error', function (error) {
 			console.log(error);
+
+			this.emit('end');
 		})
 		.pipe(concat('all.js'))
 		.pipe(gulp.dest('build'));
