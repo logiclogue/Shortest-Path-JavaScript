@@ -54,7 +54,7 @@ class Map
 			console.log(edges);
 
 			if (cell !== 1) {
-				graph.addNode(x + ',' + y)
+				graph.addNode(x + ',' + y, edges);
 			}
 		});
 	}
