@@ -82,9 +82,11 @@ class Map {
 
 			for (var x1 = x - 1; x1 < x + 2; x1 += 1) {
 				for (var y1 = x - 1; y1 < x + 2; y1 += 1) {
-					if (x1 !== 0 || y1 !== 0) {
+					if (x1 !== 0 && y1 !== 0) {
 						try {
-							edges.push(x1 + ',' + y1);
+							if (self.world[x1][y1] === 0) {
+								edges.push(x1 + ',' + y1);
+							}
 						} catch (e) {}
 					}
 				}
@@ -93,7 +95,7 @@ class Map {
 			console.log(edges);
 
 			if (cell !== 1) {
-				graph.addNode(x + ',' + y);
+				graph.addNode(x + ',' + y, edges);
 			}
 		});
 	}
