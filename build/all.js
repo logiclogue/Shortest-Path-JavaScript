@@ -45,6 +45,12 @@ class Dijkstra {
 		};
 	}
 }
+class Edge {
+    constructor(endNode, val) {
+        this.endNode = endNode;
+        this.val = val;
+    }
+}
 class Graph {
 	addNode(name, edges) {
 		this.nodes[name] = {
