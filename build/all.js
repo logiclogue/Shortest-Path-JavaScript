@@ -52,15 +52,19 @@ class Edge {
     }
 }
 class Graph {
-	addNode(name, edges) {
-		this.nodes[name] = {
-			val: 1,
-			edges: edges || {}
-		};
+	addNode(name) {
+		var node = new Node(name);
+
+		this.nodes[name] = node;
+
+		return node;
 	}
 
 	addStartNode(name) {
 		this.startNodes.push(this.nodes[name]);
+	}
+
+	addEndNode(name) {
 		this.endNodes.push(this.nodes[name]);
 	}
 
@@ -148,4 +152,13 @@ class Map {
 
 		this._populateMap();
 	}
+}
+class Node {
+    addEdge(startNode, endNode, value) {
+        this.edges.push(new Edge(endNode, value));
+    }
+
+    constructor() {
+        this.edges = {};
+    }
 }
