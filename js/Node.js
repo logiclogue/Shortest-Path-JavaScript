@@ -5,7 +5,8 @@ class Node
 	}
 
 
-    constructor() {
+    constructor(name) {
+        this.theName = name;
         this.edges = {};
     }
 }

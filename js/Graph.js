@@ -1,8 +1,9 @@
 class Graph
 {
-	addNode(name) {
+	addNode(name, edges) {
 		var node = new Node(name);
 
+		node.edges = edges;
 		this.nodes[name] = node;
 
 		return node;
