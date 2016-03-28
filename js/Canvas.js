@@ -6,7 +6,7 @@ class Canvas
 		x = Math.round(x * this.scaleFactor);
 		y = Math.round(y * this.scaleFactor);
 
-		this.ctx.fillStyle = colour || this.defaultColour;
+		this.ctx.fillStyle = colour || this.colours.theDefault;
 		this.ctx.fillRect(x + posX, y + posY, this.scaleFactor, this.scaleFactor);
 	}
 
@@ -17,6 +17,10 @@ class Canvas
 		this.ctx.stroke();
 	}
 
+	static clear() {
+		this.ctx.clearRect(0, 0, this.c.width, this.c.height);
+	}
+
 	static init() {
 		this.c = document.getElementById('main-canvas');
 		this.c.width = window.innerWidth;
@@ -25,9 +29,14 @@ class Canvas
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.defaultColour = '#AAEEEE';
 		this.scaleFactor = 10;
 		this.posX = 0;
 		this.posY = 0;
+
+		this.colours = {
+			start: '#123123',
+			end: '#FF0000',
+			theDefault: '#AAEEEE'
+		}
 	}
 }

@@ -48,7 +48,7 @@ class Map
 						}
 					}
 					catch (e) {
-						
+
 					}
 				}
 			}
@@ -56,8 +56,6 @@ class Map
 			// If not wall
 			if (cell !== 1) {
 				var node = graph.addNode(x + ',' + y, edges);
-
-				console.log(node);
 			}
 		});
 	}

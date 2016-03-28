@@ -5,7 +5,7 @@ class Canvas {
 		x = Math.round(x * this.scaleFactor);
 		y = Math.round(y * this.scaleFactor);
 
-		this.ctx.fillStyle = colour || this.defaultColour;
+		this.ctx.fillStyle = colour || this.colours.theDefault;
 		this.ctx.fillRect(x + posX, y + posY, this.scaleFactor, this.scaleFactor);
 	}
 
@@ -16,6 +16,10 @@ class Canvas {
 		this.ctx.stroke();
 	}
 
+	static clear() {
+		this.ctx.clearRect(0, 0, this.c.width, this.c.height);
+	}
+
 	static init() {
 		this.c = document.getElementById('main-canvas');
 		this.c.width = window.innerWidth;
@@ -24,10 +28,15 @@ class Canvas {
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.defaultColour = '#AAEEEE';
 		this.scaleFactor = 10;
 		this.posX = 0;
 		this.posY = 0;
+
+		this.colours = {
+			start: '#123123',
+			end: '#FF0000',
+			theDefault: '#AAEEEE'
+		};
 	}
 }
 class Dijkstra {
@@ -74,6 +83,30 @@ class Edge {
     }
 }
 class Graph {
+	_drawNode(node, colour) {
+		console.log(node);
+
+		var coords = node.split(',');
+		var x = parseInt(coords[0]);
+		var y = parseInt(coords[1]);
+
+		Canvas.drawSquare(x, y, colour);
+	}
+
+	_forEachNodeDraw(nodes, colour) {
+		var self = this;
+
+		nodes.forEach(function (node) {
+			self._drawNode(node.theName, colour);
+		});
+	}
+
+	_forInNodeDraw(nodes, colour) {
+		for (var node in nodes) {
+			this._drawNode(node, colour);
+		}
+	}
+
 	addNode(name, edges) {
 		var node = new Node(name);
 
@@ -91,6 +124,14 @@ class Graph {
 		this.endNodes.push(this.nodes[name]);
 	}
 
+	drawOnCanvas() {
+		Canvas.clear();
+
+		this._forInNodeDraw(this.nodes, Canvas.colours.theDefault);
+		this._forEachNodeDraw(this.startNodes, Canvas.colours.start);
+		this._forEachNodeDraw(this.endNodes, Canvas.colours.end);
+	}
+
 	constructor() {
 		this.nodes = {};
 		this.startNodes = [];
@@ -106,6 +147,10 @@ class Main {
 
 		Canvas.init();
 		Canvas.drawSquare(0, 0);
+
+		graph.addStartNode('0,0');
+		graph.addEndNode('9,9');
+		graph.drawOnCanvas();
 	}
 }
 
@@ -165,8 +210,6 @@ class Map {
 			// If not wall
 			if (cell !== 1) {
 				var node = graph.addNode(x + ',' + y, edges);
-
-				console.log(node);
 			}
 		});
 	}
