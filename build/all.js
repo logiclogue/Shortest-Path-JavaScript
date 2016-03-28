@@ -129,15 +129,13 @@ class Map {
 
 			for (var x1 = x - 1; x1 < x + 2; x1 += 1) {
 				for (var y1 = y - 1; y1 < y + 2; y1 += 1) {
-					if (x1 !== x || y1 !== y) {
-						try {
-							if (self.world[x1][y1] !== 1) {
-								var distance = Math.sqrt(Math.pow(x1 - x, 2) + Math.pow(y1 - y, 2));
+					try {
+						if ((x1 !== x || y1 !== y) && self.world[x1][y1] !== 1 && x1 >= 0 && y1 >= 0 && x1 < self.maxLength && y1 < self.maxLength) {
+							var distance = Math.sqrt(Math.pow(x1 - x, 2) + Math.pow(y1 - y, 2));
 
-								edges.push(new Edge(x1 + ',' + y1, distance));
-							}
-						} catch (e) {}
-					}
+							edges.push(new Edge(x1 + ',' + y1, distance));
+						}
+					} catch (e) {}
 				}
 			}
 
