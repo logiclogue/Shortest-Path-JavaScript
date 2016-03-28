@@ -7,6 +7,7 @@ class Main
 		map.convertToGraph(graph);
 
 		Canvas.init();
+		Canvas.drawSquare(0, 0)
 	}
 }
 
