@@ -10,6 +10,11 @@ class Canvas {
 	}
 
 	static drawLine(x1, y1, x2, y2) {
+		var x1 = x1 * this.scaleFactor + this.scaleFactor / 2;
+		var x2 = x2 * this.scaleFactor + this.scaleFactor / 2;
+		var y1 = y1 * this.scaleFactor + this.scaleFactor / 2;
+		var y2 = y2 * this.scaleFactor + this.scaleFactor / 2;
+
 		this.ctx.beginPath();
 		this.ctx.moveTo(x1, y1);
 		this.ctx.lineTo(x2, y2);
@@ -28,7 +33,7 @@ class Canvas {
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.scaleFactor = 10;
+		this.scaleFactor = 40;
 		this.posX = 0;
 		this.posY = 0;
 
@@ -146,11 +151,12 @@ class Main {
 		map.convertToGraph(graph);
 
 		Canvas.init();
-		Canvas.drawSquare(0, 0);
 
 		graph.addStartNode('0,0');
 		graph.addEndNode('9,9');
 		graph.drawOnCanvas();
+
+		Canvas.drawLine(0, 0, 1, 1);
 	}
 }
 

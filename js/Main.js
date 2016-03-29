@@ -7,11 +7,12 @@ class Main
 		map.convertToGraph(graph);
 
 		Canvas.init();
-		Canvas.drawSquare(0, 0);
 
 		graph.addStartNode('0,0');
 		graph.addEndNode('9,9');
 		graph.drawOnCanvas();
+
+		Canvas.drawLine(0, 0, 1, 1);
 	}
 }
 
