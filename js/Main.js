@@ -4,6 +4,8 @@ class Main
 		var graph = new Graph();
 		var map = new Map();
 
+		map.world[3][3] = 1;
+
 		map.convertToGraph(graph);
 
 		Canvas.init();

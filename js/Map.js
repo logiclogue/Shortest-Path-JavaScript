@@ -31,6 +31,16 @@ class Map
 	}
 
 
+	drawOnCanvas() {
+		Canvas.clear();
+
+		this.world.forEach(function (row) {
+			this.world.forEach(function (cell) {
+				Canvas.drawSquare
+			});
+		});
+	}
+
 	convertToGraph(graph) {
 		var self = this;
 

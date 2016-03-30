@@ -43,7 +43,8 @@ class Canvas
 		this.colours = {
 			start: '#00FF00',
 			end: '#FF0000',
-			theDefault: '#AAEEEE'
+			theDefault: '#DDDDDD',
+			wall: '#000000'
 		}
 	}
 }

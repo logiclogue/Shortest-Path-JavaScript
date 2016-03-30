@@ -42,7 +42,8 @@ class Canvas {
 		this.colours = {
 			start: '#00FF00',
 			end: '#FF0000',
-			theDefault: '#AAEEEE'
+			theDefault: '#DDDDDD',
+			wall: '#000000'
 		};
 	}
 }
@@ -90,28 +91,6 @@ class Edge {
     }
 }
 class Graph {
-	_drawNode(node, colour) {
-		var coords = node.split(',');
-		var x = parseInt(coords[0]);
-		var y = parseInt(coords[1]);
-
-		Canvas.drawSquare(x, y, colour);
-	}
-
-	_forEachNodeDraw(nodes, colour) {
-		var self = this;
-
-		nodes.forEach(function (node) {
-			self._drawNode(node.theName, colour);
-		});
-	}
-
-	_forInNodeDraw(nodes, colour) {
-		for (var node in nodes) {
-			this._drawNode(node, colour);
-		}
-	}
-
 	addNode(name, edges) {
 		var node = new Node(name);
 
@@ -129,14 +108,6 @@ class Graph {
 		this.endNodes.push(this.nodes[name]);
 	}
 
-	drawOnCanvas() {
-		Canvas.clear();
-
-		this._forInNodeDraw(this.nodes, Canvas.colours.theDefault);
-		this._forEachNodeDraw(this.startNodes, Canvas.colours.start);
-		this._forEachNodeDraw(this.endNodes, Canvas.colours.end);
-	}
-
 	constructor() {
 		this.nodes = {};
 		this.startNodes = [];
@@ -147,6 +118,8 @@ class Main {
 	constructor() {
 		var graph = new Graph();
 		var map = new Map();
+
+		map.world[3][3] = 1;
 
 		map.convertToGraph(graph);
 
@@ -192,6 +165,16 @@ class Map {
 				callback(x, y);
 			}
 		}
+	}
+
+	drawOnCanvas() {
+		Canvas.clear();
+
+		this.world.forEach(function (row) {
+			this.world.forEach(function (cell) {
+				Canvas.drawSquare;
+			});
+		});
 	}
 
 	convertToGraph(graph) {
