@@ -18,6 +18,8 @@ class Canvas {
 		this.ctx.beginPath();
 		this.ctx.moveTo(x1, y1);
 		this.ctx.lineTo(x2, y2);
+		this.ctx.lineWidth = this.scaleFactor / 5;
+		this.ctx.lineCap = 'round';
 		this.ctx.stroke();
 	}
 
@@ -38,7 +40,7 @@ class Canvas {
 		this.posY = 0;
 
 		this.colours = {
-			start: '#123123',
+			start: '#00FF00',
 			end: '#FF0000',
 			theDefault: '#AAEEEE'
 		};
@@ -89,8 +91,6 @@ class Edge {
 }
 class Graph {
 	_drawNode(node, colour) {
-		console.log(node);
-
 		var coords = node.split(',');
 		var x = parseInt(coords[0]);
 		var y = parseInt(coords[1]);

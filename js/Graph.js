@@ -1,8 +1,6 @@
 class Graph
 {
 	_drawNode(node, colour) {
-		console.log(node);
-
 		var coords = node.split(',');
 		var x = parseInt(coords[0]);
 		var y = parseInt(coords[1]);

@@ -19,6 +19,8 @@ class Canvas
 		this.ctx.beginPath();
 		this.ctx.moveTo(x1, y1);
 		this.ctx.lineTo(x2, y2);
+		this.ctx.lineWidth = this.scaleFactor / 5;
+		this.ctx.lineCap = 'round';
 		this.ctx.stroke();
 	}
 
@@ -39,7 +41,7 @@ class Canvas
 		this.posY = 0;
 
 		this.colours = {
-			start: '#123123',
+			start: '#00FF00',
 			end: '#FF0000',
 			theDefault: '#AAEEEE'
 		}
