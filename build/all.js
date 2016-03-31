@@ -48,10 +48,6 @@ class Canvas {
 	}
 }
 class Dijkstra {
-	_forEachNode(callback) {
-		this.graph.nodes.forEach(callback);
-	}
-
 	_lowestVertex() {
 		var lowest;
 
@@ -60,19 +56,46 @@ class Dijkstra {
 		});
 	}
 
-	selectGraph(graph) {
-		this.graph = graph;
+	_convertStringToNode(string) {
+		return this.graph.nodes[string];
+	}
 
-		this.forEachNode(function (node) {
-			node.dijkstra = this.obj;
+	_convertAllToNodes(nodes) {
+		var self = this;
+
+		nodes.forEach(function (node) {
+			node = self._convertStringToNode(node);
 		});
 	}
 
-	run() {
-		this._lowestVertex();
+	_findAdjacentNodes() {
+		var self = this;
+
+		this.complete.forEach(function (node) {
+			node.edges.forEach(function (edge) {
+				var nodeObj = self._convertStringToNode(edge.endNode);
+
+				if (self.testing.indexOf(nodeObj) === -1) {
+					self.testing.push(nodeObj);
+				}
+			});
+		});
 	}
 
-	constructor() {
+	selectGraph(graph) {
+		this.graph = graph;
+	}
+
+	run() {
+		this.complete = this.graph.startNodes.slice();
+
+		this._lowestVertex();
+		this._findAdjacentNodes();
+
+		console.log(this.testing);
+	}
+
+	constructor(graph) {
 		this.complete = [];
 		this.testing = [];
 		this.graph = {};
@@ -82,6 +105,8 @@ class Dijkstra {
 			this.temporaryLabel;
 			this.smallestValue;
 		};
+
+		this.selectGraph(graph);
 	}
 }
 class Edge {
@@ -120,6 +145,7 @@ class Main {
 
 		var graph = new Graph();
 		var map = new Map();
+		var dijkstra = new Dijkstra(graph);
 
 		map.world[3][3] = 1;
 
@@ -127,9 +153,11 @@ class Main {
 
 		graph.addStartNode('0,0');
 		graph.addEndNode('9,9');
-		map.drawOnCanvas();
 
+		map.drawOnCanvas();
 		Canvas.drawLine(0, 0, 1, 1);
+
+		dijkstra.run();
 	}
 }
 
@@ -174,8 +202,6 @@ class Map {
 
 		this.world.forEach(function (row, x) {
 			row.forEach(function (cell, y) {
-				console.log(cell, x, y);
-
 				Canvas.drawSquare(x, y, colourIndex[cell]);
 			});
 		});

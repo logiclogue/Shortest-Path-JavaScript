@@ -5,6 +5,7 @@ class Main
 
 		var graph = new Graph();
 		var map = new Map();
+		var dijkstra = new Dijkstra(graph);
 
 		map.world[3][3] = 1;
 
@@ -12,9 +13,11 @@ class Main
 
 		graph.addStartNode('0,0');
 		graph.addEndNode('9,9');
-		map.drawOnCanvas();
 
+		map.drawOnCanvas();
 		Canvas.drawLine(0, 0, 1, 1);
+
+		dijkstra.run();
 	}
 }
 

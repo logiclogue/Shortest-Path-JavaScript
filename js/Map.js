@@ -38,8 +38,6 @@ class Map
 
 		this.world.forEach(function (row, x) {
 			row.forEach(function (cell, y) {
-				console.log(cell, x, y);
-
 				Canvas.drawSquare(x, y, colourIndex[cell]);
 			});
 		});
