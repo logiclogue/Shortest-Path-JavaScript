@@ -1,6 +1,8 @@
 class Main
 {
 	constructor() {
+		Canvas.init();
+
 		var graph = new Graph();
 		var map = new Map();
 
@@ -8,11 +10,9 @@ class Main
 
 		map.convertToGraph(graph);
 
-		Canvas.init();
-
 		graph.addStartNode('0,0');
 		graph.addEndNode('9,9');
-		graph.drawOnCanvas();
+		map.drawOnCanvas();
 
 		Canvas.drawLine(0, 0, 1, 1);
 	}

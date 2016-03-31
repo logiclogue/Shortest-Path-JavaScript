@@ -32,11 +32,15 @@ class Map
 
 
 	drawOnCanvas() {
+		var colourIndex = this.colourIndex;
+
 		Canvas.clear();
 
-		this.world.forEach(function (row) {
-			this.world.forEach(function (cell) {
-				Canvas.drawSquare
+		this.world.forEach(function (row, x) {
+			row.forEach(function (cell, y) {
+				console.log(cell, x, y);
+
+				Canvas.drawSquare(x, y, colourIndex[cell]);
 			});
 		});
 	}
@@ -74,6 +78,12 @@ class Map
 	constructor() {
 		this.world = [];
 		this.maxLength = 10;
+		this.colourIndex = [
+			Canvas.colours.theDefault,
+			Canvas.colours.wall,
+			Canvas.colours.start,
+			Canvas.colours.end
+		];
 
 		this._populateMap();
 	}

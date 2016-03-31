@@ -116,6 +116,8 @@ class Graph {
 }
 class Main {
 	constructor() {
+		Canvas.init();
+
 		var graph = new Graph();
 		var map = new Map();
 
@@ -123,11 +125,9 @@ class Main {
 
 		map.convertToGraph(graph);
 
-		Canvas.init();
-
 		graph.addStartNode('0,0');
 		graph.addEndNode('9,9');
-		graph.drawOnCanvas();
+		map.drawOnCanvas();
 
 		Canvas.drawLine(0, 0, 1, 1);
 	}
@@ -168,11 +168,15 @@ class Map {
 	}
 
 	drawOnCanvas() {
+		var colourIndex = this.colourIndex;
+
 		Canvas.clear();
 
-		this.world.forEach(function (row) {
-			this.world.forEach(function (cell) {
-				Canvas.drawSquare;
+		this.world.forEach(function (row, x) {
+			row.forEach(function (cell, y) {
+				console.log(cell, x, y);
+
+				Canvas.drawSquare(x, y, colourIndex[cell]);
 			});
 		});
 	}
@@ -206,6 +210,7 @@ class Map {
 	constructor() {
 		this.world = [];
 		this.maxLength = 10;
+		this.colourIndex = [Canvas.colours.theDefault, Canvas.colours.wall, Canvas.colours.start, Canvas.colours.end];
 
 		this._populateMap();
 	}

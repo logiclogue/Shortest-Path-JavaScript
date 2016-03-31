@@ -34,7 +34,7 @@ class Dijkstra
 		this.graph = {};
 
 		this.obj = function () {
-			this.permanentLabel; 
+			this.permanentLabel;
 			this.temporaryLabel;
 			this.smallestValue;
 		};
