@@ -36,7 +36,7 @@ class Canvas
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.scaleFactor = 40;
+		this.scaleFactor = 10;
 		this.posX = 0;
 		this.posY = 0;
 

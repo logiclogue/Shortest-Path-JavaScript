@@ -15,9 +15,6 @@ class Map
 				this.world[x][y] = 0;
 			}
 		}
-
-		this.world[0][0] = 2;
-		this.world[this.maxLength - 1][this.maxLength - 1] = 3;
 	}
 
 	_forEachCell(callback) {
@@ -50,10 +47,15 @@ class Map
 			var cell = self.world[x][y];
 			var edges = [];
 
+			// Checks every square around the cell
 			for (var x1 = x - 1; x1 < x + 2; x1 += 1) {
 				for (var y1 = y - 1; y1 < y + 2; y1 += 1) {
 					try {
-						if ((x1 !== x || y1 !== y) && self.world[x1][y1] !== 1 && x1 >= 0 && y1 >= 0 && x1 < self.maxLength && y1 < self.maxLength) {
+						var isNotCentre = x1 !== x || y1 !== y;
+						var isNotWall = self.world[x1][y1] !== 1;
+						var isInWorld = x1 >= 0 && y1 >= 0 && x1 < self.maxLength && y1 < self.maxLength;
+
+						if (isNotCentre && isNotWall && isInWorld) {
 							var distance = Math.sqrt(Math.pow(x1 - x, 2) + Math.pow(y1 - y, 2));
 
 							edges.push(new Edge(x1 + ',' + y1, distance));
@@ -69,13 +71,22 @@ class Map
 			if (cell !== 1) {
 				var node = graph.addNode(x + ',' + y, edges);
 			}
+
+			// If start node
+			if (cell === 2) {
+				graph.addStartNode(x + ',' + y);
+			}
+			// If end node
+			else if (cell === 3) {
+				graph.addEndNode(x + ',' + y);
+			}
 		});
 	}
 
 
 	constructor() {
 		this.world = [];
-		this.maxLength = 10;
+		this.maxLength = 100;
 		this.colourIndex = [
 			Canvas.colours.theDefault,
 			Canvas.colours.wall,

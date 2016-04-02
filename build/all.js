@@ -35,7 +35,7 @@ class Canvas {
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.scaleFactor = 40;
+		this.scaleFactor = 10;
 		this.posX = 0;
 		this.posY = 0;
 
@@ -48,21 +48,6 @@ class Canvas {
 	}
 }
 class Dijkstra {
-	_lowestVertex() {
-		var lowest;
-
-		this.testing.forEach(function (node) {
-			lowest = lowest || node;
-
-			if (node.working.shortestDistance < lowest.working.shortestDistance) {
-				lowest = node;
-			}
-		});
-
-		this.testing.splice(this.testing.indexOf(lowest), 1);
-		this.complete.push(lowest);
-	}
-
 	_convertStringToNode(string) {
 		return this.graph.nodes[string];
 	}
@@ -82,6 +67,21 @@ class Dijkstra {
 			node.working = new self.NodeObj();
 			node.working.shortestDistance = 0;
 		});
+	}
+
+	_lowestVertex() {
+		var lowest;
+
+		this.testing.forEach(function (node) {
+			lowest = lowest || node;
+
+			if (node.working.shortestDistance < lowest.working.shortestDistance) {
+				lowest = node;
+			}
+		});
+
+		this.testing.splice(this.testing.indexOf(lowest), 1);
+		this.complete.push(lowest);
 	}
 
 	_findAdjacentNodes() {
@@ -108,6 +108,30 @@ class Dijkstra {
 					}
 			});
 		});
+	}
+
+	_foundEndNode() {
+		var self = this;
+		var hasFound = false;
+
+		this.complete.forEach(function (node) {
+			if (self.graph.endNodes.indexOf(node) !== -1) {
+				self.endNode = self.endNode || node;
+				hasFound = true;
+			}
+		});
+
+		return hasFound;
+	}
+
+	_backTrack() {
+		var coordsA = this.endNode.theName.split(',');
+		var coordsB;
+
+		this.endNode = this.endNode.working.previousNode;
+		coordsB = this.endNode.theName.split(',');
+
+		Canvas.drawLine(coordsA[0], coordsA[1], coordsB[0], coordsB[1]);
 	}
 
 	_drawNode(node, colour) {
@@ -139,16 +163,21 @@ class Dijkstra {
 		this._addWorkingObj(this.complete);
 
 		setInterval(function () {
-			self._findAdjacentNodes();
-			self._lowestVertex();
-			self._draw();
-		}, 100);
+			if (!self._foundEndNode()) {
+				self._findAdjacentNodes();
+				self._draw();
+				self._lowestVertex();
+			} else {
+				self._backTrack();
+			}
+		}, 1);
 	}
 
 	constructor(graph) {
 		this.complete = [];
 		this.testing = [];
 		this.graph = {};
+		this.endNode;
 
 		this.NodeObj = function () {
 			this.shortestDistance;
@@ -196,15 +225,19 @@ class Main {
 		var map = new Map();
 		var dijkstra = new Dijkstra(graph);
 
-		map.world[3][3] = 1;
+		map.world[0][0] = 2;
+		map.world[Math.floor(Math.random() * 100)][Math.floor(Math.random() * 100)] = 3;
+
+		for (var x = 0; x < map.maxLength; x += 1) {
+			for (var y = 0; y < map.maxLength; y += 1) {
+				if (Math.random() < 0.3) {
+					map.world[x][y] = 1;
+				}
+			}
+		}
 
 		map.convertToGraph(graph);
-
-		graph.addStartNode('0,0');
-		graph.addEndNode('9,9');
-
 		map.drawOnCanvas();
-		Canvas.drawLine(0, 0, 1, 1);
 
 		dijkstra.run();
 	}
@@ -229,9 +262,6 @@ class Map {
 				this.world[x][y] = 0;
 			}
 		}
-
-		this.world[0][0] = 2;
-		this.world[this.maxLength - 1][this.maxLength - 1] = 3;
 	}
 
 	_forEachCell(callback) {
@@ -263,10 +293,15 @@ class Map {
 			var cell = self.world[x][y];
 			var edges = [];
 
+			// Checks every square around the cell
 			for (var x1 = x - 1; x1 < x + 2; x1 += 1) {
 				for (var y1 = y - 1; y1 < y + 2; y1 += 1) {
 					try {
-						if ((x1 !== x || y1 !== y) && self.world[x1][y1] !== 1 && x1 >= 0 && y1 >= 0 && x1 < self.maxLength && y1 < self.maxLength) {
+						var isNotCentre = x1 !== x || y1 !== y;
+						var isNotWall = self.world[x1][y1] !== 1;
+						var isInWorld = x1 >= 0 && y1 >= 0 && x1 < self.maxLength && y1 < self.maxLength;
+
+						if (isNotCentre && isNotWall && isInWorld) {
 							var distance = Math.sqrt(Math.pow(x1 - x, 2) + Math.pow(y1 - y, 2));
 
 							edges.push(new Edge(x1 + ',' + y1, distance));
@@ -279,12 +314,21 @@ class Map {
 			if (cell !== 1) {
 				var node = graph.addNode(x + ',' + y, edges);
 			}
+
+			// If start node
+			if (cell === 2) {
+				graph.addStartNode(x + ',' + y);
+			}
+			// If end node
+			else if (cell === 3) {
+					graph.addEndNode(x + ',' + y);
+				}
 		});
 	}
 
 	constructor() {
 		this.world = [];
-		this.maxLength = 10;
+		this.maxLength = 100;
 		this.colourIndex = [Canvas.colours.theDefault, Canvas.colours.wall, Canvas.colours.start, Canvas.colours.end];
 
 		this._populateMap();

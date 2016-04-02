@@ -7,15 +7,19 @@ class Main
 		var map = new Map();
 		var dijkstra = new Dijkstra(graph);
 
-		map.world[3][3] = 1;
+		map.world[0][0] = 2;
+		map.world[Math.floor(Math.random() * 100)][Math.floor(Math.random() * 100)] = 3;
+
+		for (var x = 0; x < map.maxLength; x += 1) {
+			for (var y = 0; y < map.maxLength; y += 1) {
+				if (Math.random() < 0.3) {
+					map.world[x][y] = 1;
+				}
+			}
+		}
 
 		map.convertToGraph(graph);
-
-		graph.addStartNode('0,0');
-		graph.addEndNode('9,9');
-
 		map.drawOnCanvas();
-		Canvas.drawLine(0, 0, 1, 1);
 
 		dijkstra.run();
 	}

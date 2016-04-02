@@ -1,20 +1,5 @@
 class Dijkstra
 {
-	_lowestVertex() {
-		var lowest;
-
-		this.testing.forEach(function (node) {
-			lowest = lowest || node;
-
-			if (node.working.shortestDistance < lowest.working.shortestDistance) {
-				lowest = node;
-			}
-		});
-
-		this.testing.splice(this.testing.indexOf(lowest), 1);
-		this.complete.push(lowest);
-	}
-
 	_convertStringToNode(string) {
 		return this.graph.nodes[string];
 	}
@@ -34,6 +19,21 @@ class Dijkstra
 			node.working = new self.NodeObj();
 			node.working.shortestDistance = 0;
 		});
+	}
+
+	_lowestVertex() {
+		var lowest;
+
+		this.testing.forEach(function (node) {
+			lowest = lowest || node;
+
+			if (node.working.shortestDistance < lowest.working.shortestDistance) {
+				lowest = node;
+			}
+		});
+
+		this.testing.splice(this.testing.indexOf(lowest), 1);
+		this.complete.push(lowest);
 	}
 
 	_findAdjacentNodes() {
@@ -60,6 +60,30 @@ class Dijkstra
 				}
 			});
 		});
+	}
+
+	_foundEndNode() {
+		var self = this;
+		var hasFound = false;
+
+		this.complete.forEach(function (node) {
+			if (self.graph.endNodes.indexOf(node) !== -1) {
+				self.endNode = self.endNode || node;
+				hasFound = true;
+			}
+		});
+
+		return hasFound;
+	}
+
+	_backTrack() {
+		var coordsA = this.endNode.theName.split(',');
+		var coordsB;
+
+		this.endNode = this.endNode.working.previousNode;
+		coordsB = this.endNode.theName.split(',');
+
+		Canvas.drawLine(coordsA[0], coordsA[1], coordsB[0], coordsB[1]);
 	}
 
 	_drawNode(node, colour) {
@@ -92,10 +116,15 @@ class Dijkstra
 		this._addWorkingObj(this.complete);
 
 		setInterval(function () {
-			self._findAdjacentNodes();
-			self._lowestVertex();
-			self._draw();
-		}, 100);
+			if (!self._foundEndNode()) {
+				self._findAdjacentNodes();
+				self._draw();
+				self._lowestVertex();
+			}
+			else {
+				self._backTrack();
+			}
+		}, 1);
 	}
 
 
@@ -103,6 +132,7 @@ class Dijkstra
 		this.complete = [];
 		this.testing = [];
 		this.graph = {};
+		this.endNode;
 
 		this.NodeObj = function () {
 			this.shortestDistance;
