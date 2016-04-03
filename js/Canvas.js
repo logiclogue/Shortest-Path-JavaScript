@@ -1,4 +1,4 @@
-class Canvas
+export default class Canvas
 {
 	static drawSquare(x, y, colour) {
 		var posX = this.posX * this.scaleFactor;
@@ -36,7 +36,7 @@ class Canvas
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.scaleFactor = 10;
+		this.scaleFactor = 50;
 		this.posX = 0;
 		this.posY = 0;
 

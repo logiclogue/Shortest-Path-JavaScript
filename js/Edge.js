@@ -1,4 +1,4 @@
-class Edge
+export default class Edge
 {
     constructor(endNode, val) {
         this.endNode = endNode;

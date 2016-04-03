@@ -1,4 +1,6 @@
-class Dijkstra
+import PathAlgorithm from 'PathAlgorithm'
+
+export default class Dijkstra extends PathAlgorithm
 {
 	_convertStringToNode(string) {
 		return this.graph.nodes[string];
@@ -105,8 +107,15 @@ class Dijkstra
 	}
 
 
-	selectGraph(graph) {
-		this.graph = graph;
+	step() {
+		if (!this._foundEndNode()) {
+			this._findAdjacentNodes();
+			this._draw();
+			this._lowestVertex();
+		}
+		else {
+			this._backTrack();
+		}
 	}
 
 	run() {
@@ -114,31 +123,22 @@ class Dijkstra
 		this.complete = this.graph.startNodes.slice();
 
 		this._addWorkingObj(this.complete);
-
 		setInterval(function () {
-			if (!self._foundEndNode()) {
-				self._findAdjacentNodes();
-				self._draw();
-				self._lowestVertex();
-			}
-			else {
-				self._backTrack();
-			}
+			self.step();
 		}, 1);
 	}
 
 
 	constructor(graph) {
+		super(graph);
+
+		this.algorithmName = 'Dijkstra';
 		this.complete = [];
 		this.testing = [];
-		this.graph = {};
 		this.endNode;
-
 		this.NodeObj = function () {
 			this.shortestDistance;
 			this.previousNode;
 		};
-
-		this.selectGraph(graph);
 	}
 }

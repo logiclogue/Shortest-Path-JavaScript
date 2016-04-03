@@ -1,4 +1,4 @@
-class Graph
+export defalult class Graph
 {
 	addNode(name, edges) {
 		var node = new Node(name);

@@ -1,4 +1,4 @@
-class Map
+export default class Map
 {
 	_populateMap() {
 		/*
@@ -86,7 +86,7 @@ class Map
 
 	constructor() {
 		this.world = [];
-		this.maxLength = 100;
+		this.maxLength = 20;
 		this.colourIndex = [
 			Canvas.colours.theDefault,
 			Canvas.colours.wall,
