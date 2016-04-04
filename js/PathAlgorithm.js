@@ -7,6 +7,7 @@ export default class PathAlgorithm
         this.selectGraph(graph);
     }
 
+
     selectGraph(graph) {
         this.graph = graph || {};
     }

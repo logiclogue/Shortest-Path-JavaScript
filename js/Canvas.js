@@ -1,5 +1,26 @@
 export default class Canvas
 {
+	static init() {
+		this.c = document.getElementById('main-canvas');
+		this.c.width = window.innerWidth;
+		this.c.height = window.innerHeight;
+		this.ctx = this.c.getContext('2d');
+		this.width = this.c.width;
+		this.height = this.c.height;
+
+		this.scaleFactor = 50;
+		this.posX = 0;
+		this.posY = 0;
+
+		this.colours = {
+			start: '#00FF00',
+			end: '#FF0000',
+			theDefault: '#DDDDDD',
+			wall: '#000000'
+		}
+	}
+
+
 	static drawSquare(x, y, colour) {
 		var posX = this.posX * this.scaleFactor;
 		var posY = this.posY * this.scaleFactor;
@@ -26,25 +47,5 @@ export default class Canvas
 
 	static clear() {
 		this.ctx.clearRect(0, 0, this.c.width, this.c.height);
-	}
-
-	static init() {
-		this.c = document.getElementById('main-canvas');
-		this.c.width = window.innerWidth;
-		this.c.height = window.innerHeight;
-		this.ctx = this.c.getContext('2d');
-		this.width = this.c.width;
-		this.height = this.c.height;
-
-		this.scaleFactor = 50;
-		this.posX = 0;
-		this.posY = 0;
-
-		this.colours = {
-			start: '#00FF00',
-			end: '#FF0000',
-			theDefault: '#DDDDDD',
-			wall: '#000000'
-		}
 	}
 }

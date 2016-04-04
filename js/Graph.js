@@ -1,5 +1,15 @@
-export defalult class Graph
+import Edge from './Edge'
+import Node from './Node'
+
+export default class Graph
 {
+	constructor() {
+		this.nodes = {};
+		this.startNodes = [];
+		this.endNodes = [];
+	}
+
+	
 	addNode(name, edges) {
 		var node = new Node(name);
 
@@ -15,12 +25,5 @@ export defalult class Graph
 
 	addEndNode(name) {
 		this.endNodes.push(this.nodes[name]);
-	}
-
-
-	constructor() {
-		this.nodes = {};
-		this.startNodes = [];
-		this.endNodes = [];
 	}
 }

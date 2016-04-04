@@ -1,9 +1,7 @@
-import Dijkstra from 'Dijkstra'
-import Canvas from 'Canvas'
-import Edge from 'Edge'
-import Graph from 'Graph'
-import Map from 'Map'
-import Node from 'Node'
+import Dijkstra from './Dijkstra'
+import Canvas from './Canvas'
+import Graph from './Graph'
+import Map from './Map'
 
 export default class Main
 {

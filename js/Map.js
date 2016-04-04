@@ -1,44 +1,21 @@
+import Canvas from './Canvas'
+import Edge from './Edge'
+
 export default class Map
 {
-	_populateMap() {
-		/*
-		 * 0 = Nothing
-		 * 1 = Wall
-		 * 2 = Start
-		 * 3 = End
-		 */
+	constructor() {
+		this.world = [];
+		this.maxLength = 20;
+		this.colourIndex = [
+			Canvas.colours.theDefault,
+			Canvas.colours.wall,
+			Canvas.colours.start,
+			Canvas.colours.end
+		];
 
-		for (var x = 0; x < this.maxLength; x += 1) {
-			this.world[x] = [];
-
-			for (var y = 0; y < this.maxLength; y += 1) {
-				this.world[x][y] = 0;
-			}
-		}
+		this._populateMap();
 	}
 
-	_forEachCell(callback) {
-		var max = this.maxLength;
-
-		for (var x = 0; x < max; x += 1) {
-			for (var y = 0; y < max; y += 1) {
-				callback(x, y);
-			}
-		}
-	}
-
-
-	drawOnCanvas() {
-		var colourIndex = this.colourIndex;
-
-		Canvas.clear();
-
-		this.world.forEach(function (row, x) {
-			row.forEach(function (cell, y) {
-				Canvas.drawSquare(x, y, colourIndex[cell]);
-			});
-		});
-	}
 
 	convertToGraph(graph) {
 		var self = this;
@@ -83,17 +60,43 @@ export default class Map
 		});
 	}
 
+	drawOnCanvas() {
+		var colourIndex = this.colourIndex;
 
-	constructor() {
-		this.world = [];
-		this.maxLength = 20;
-		this.colourIndex = [
-			Canvas.colours.theDefault,
-			Canvas.colours.wall,
-			Canvas.colours.start,
-			Canvas.colours.end
-		];
+		Canvas.clear();
 
-		this._populateMap();
+		this.world.forEach(function (row, x) {
+			row.forEach(function (cell, y) {
+				Canvas.drawSquare(x, y, colourIndex[cell]);
+			});
+		});
+	}
+
+
+	_forEachCell(callback) {
+		var max = this.maxLength;
+
+		for (var x = 0; x < max; x += 1) {
+			for (var y = 0; y < max; y += 1) {
+				callback(x, y);
+			}
+		}
+	}
+
+	_populateMap() {
+		/*
+		 * 0 = Nothing
+		 * 1 = Wall
+		 * 2 = Start
+		 * 3 = End
+		 */
+
+		for (var x = 0; x < this.maxLength; x += 1) {
+			this.world[x] = [];
+
+			for (var y = 0; y < this.maxLength; y += 1) {
+				this.world[x][y] = 0;
+			}
+		}
 	}
 }
