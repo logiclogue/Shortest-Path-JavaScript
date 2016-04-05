@@ -4,7 +4,6 @@ var watch = require('gulp-watch');
 var babel = require('gulp-babel');
 var browserify = require('browserify');
 var babelify = require('babelify');
-var fs = require('fs');
 var source = require('vinyl-source-stream');
 
 var paths = {
@@ -19,11 +18,16 @@ var paths = {
 
 // JavaScript tasks
 gulp.task('javascript', function () {
-	browserify('./js/Main.js', { debug: true })
-		.transform(babelify, {
-			presets: ['es2015']
+	browserify('./js/Main.js')
+		.transform('babelify', {
+			presets: ['es2015'],
+			sourceMaps: false
 		})
 		.bundle()
+		.on('error', function (error) {
+			console.log(error);
+			this.emit('end');
+		})
 		.pipe(source('all.js'))
 		.pipe(gulp.dest('build'));
 });
