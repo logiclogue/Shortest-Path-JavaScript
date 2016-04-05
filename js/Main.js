@@ -8,19 +8,22 @@ export default class Main
 	constructor() {
 		Canvas.init();
 
-		var graph = new Graph();
-		var map = new Map();
-		var dijkstra = new Dijkstra(graph);
+		let graph = new Graph();
+		let map = new Map();
+		let dijkstra = new Dijkstra(graph);
 
-		for (var x = 0; x < map.maxLength; x += 1) {
-			for (var y = 0; y < map.maxLength; y += 1) {
+		for (let x = 0; x < map.maxLength; x += 1) {
+			for (let y = 0; y < map.maxLength; y += 1) {
 				if (Math.random() < 0.5) {
 					map.world[x][y] = 1;
 				}
 			}
 		}
 
-		map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
+		for (let i = 0; i < Math.floor(Math.random() * 10); i += 1) {
+			map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
+		}
+
 		map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 3;
 
 		map.convertToGraph(graph);
@@ -32,5 +35,5 @@ export default class Main
 
 
 window.onload = function () {
-	var main = new Main();
+	let main = new Main();
 };

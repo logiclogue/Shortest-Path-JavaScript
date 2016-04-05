@@ -18,12 +18,11 @@ export default class Dijkstra extends PathAlgorithm
 
 
 	run() {
-		var self = this;
 		this.complete = this.graph.startNodes.slice();
 
 		this._addWorkingObj(this.complete);
-		setInterval(function () {
-			self.step();
+		setInterval(() => {
+			this.step();
 		}, 1);
 	}
 
@@ -40,26 +39,24 @@ export default class Dijkstra extends PathAlgorithm
 
 
 	_draw() {
-		var self = this;
-
-		this.testing.forEach(function (node) {
-			self._drawNode(node, '#00FFFF');
+		this.testing.forEach((node) => {
+			this._drawNode(node, '#00FFFF');
 		});
 
-		this.complete.forEach(function (node) {
-			self._drawNode(node, '#0000FF');
+		this.complete.forEach((node) => {
+			this._drawNode(node, '#0000FF');
 		});
 	}
 
 	_drawNode(node, colour) {
-		var coords = node.theName.split(',');
+		let coords = node.theName.split(',');
 
 		Canvas.drawSquare(coords[0], coords[1], colour);
 	}
 
 	_backTrack() {
-		var coordsA = this.endNode.theName.split(',');
-		var coordsB;
+		let coordsA = this.endNode.theName.split(',');
+		let coordsB;
 
 		this.endNode = this.endNode.working.previousNode;
 		coordsB = this.endNode.theName.split(',');
@@ -68,12 +65,11 @@ export default class Dijkstra extends PathAlgorithm
 	}
 
 	_foundEndNode() {
-		var self = this;
-		var hasFound = false;
+		let hasFound = false;
 
-		this.complete.forEach(function (node) {
-			if (self.graph.endNodes.indexOf(node) !== -1) {
-				self.endNode = self.endNode || node;
+		this.complete.forEach((node) => {
+			if (this.graph.endNodes.indexOf(node) !== -1) {
+				this.endNode = this.endNode || node;
 				hasFound = true;
 			}
 		});
@@ -82,21 +78,19 @@ export default class Dijkstra extends PathAlgorithm
 	}
 
 	_findAdjacentNodes() {
-		var self = this;
-
-		this.complete.forEach(function (node) {
-			node.edges.forEach(function (edge) {
-				var nodeObj = self._convertStringToNode(edge.endNode);
-				var newDistance = node.working.shortestDistance + edge.val;
+		this.complete.forEach((node) => {
+			node.edges.forEach((edge) => {
+				let nodeObj = this._convertStringToNode(edge.endNode);
+				let newDistance = node.working.shortestDistance + edge.val;
 
 				// Is not in testing array and not in complete array.
 				// In other words, if the node hasn't been seen by the algorithm yet.
-				if (self.testing.indexOf(nodeObj) === -1 && self.complete.indexOf(nodeObj) === -1) {
-					nodeObj.working = new self.NodeObj();
+				if (this.testing.indexOf(nodeObj) === -1 && this.complete.indexOf(nodeObj) === -1) {
+					nodeObj.working = new this.NodeObj();
 					nodeObj.working.shortestDistance = newDistance;
 					nodeObj.working.previousNode = node;
 
-					self.testing.push(nodeObj);
+					this.testing.push(nodeObj);
 				}
 				// Found shorter distance
 				else if (nodeObj.working.shortestDistance > newDistance) {
@@ -108,9 +102,9 @@ export default class Dijkstra extends PathAlgorithm
 	}
 
 	_lowestVertex() {
-		var lowest;
+		let lowest;
 
-		this.testing.forEach(function (node) {
+		this.testing.forEach((node) => {
 			lowest = lowest || node;
 
 			if (node.working.shortestDistance < lowest.working.shortestDistance) {
@@ -123,19 +117,15 @@ export default class Dijkstra extends PathAlgorithm
 	}
 
 	_addWorkingObj(nodes) {
-		var self = this;
-
-		nodes.forEach(function (node) {
-			node.working = new self.NodeObj();
+		nodes.forEach((node) => {
+			node.working = new this.NodeObj();
 			node.working.shortestDistance = 0;
 		});
 	}
 
 	_convertAllToNodes(nodes) {
-		var self = this;
-
-		nodes.forEach(function (node) {
-			node = self._convertStringToNode(node);
+		nodes.forEach((node) => {
+			node = this._convertStringToNode(node);
 		});
 	}
 

@@ -9,9 +9,9 @@ export default class Graph
 		this.endNodes = [];
 	}
 
-	
+
 	addNode(name, edges) {
-		var node = new Node(name);
+		let node = new Node(name);
 
 		node.edges = edges;
 		this.nodes[name] = node;

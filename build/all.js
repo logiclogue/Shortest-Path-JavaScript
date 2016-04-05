@@ -49,10 +49,10 @@ var Canvas = function () {
 	}, {
 		key: 'drawLine',
 		value: function drawLine(x1, y1, x2, y2) {
-			var x1 = x1 * this.scaleFactor + this.scaleFactor / 2;
-			var x2 = x2 * this.scaleFactor + this.scaleFactor / 2;
-			var y1 = y1 * this.scaleFactor + this.scaleFactor / 2;
-			var y2 = y2 * this.scaleFactor + this.scaleFactor / 2;
+			x1 = x1 * this.scaleFactor + this.scaleFactor / 2;
+			x2 = x2 * this.scaleFactor + this.scaleFactor / 2;
+			y1 = y1 * this.scaleFactor + this.scaleFactor / 2;
+			y2 = y2 * this.scaleFactor + this.scaleFactor / 2;
 
 			this.ctx.beginPath();
 			this.ctx.moveTo(x1, y1);
@@ -119,12 +119,13 @@ var Dijkstra = function (_PathAlgorithm) {
 	_createClass(Dijkstra, [{
 		key: 'run',
 		value: function run() {
-			var self = this;
+			var _this2 = this;
+
 			this.complete = this.graph.startNodes.slice();
 
 			this._addWorkingObj(this.complete);
 			setInterval(function () {
-				self.step();
+				_this2.step();
 			}, 1);
 		}
 	}, {
@@ -141,14 +142,14 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_draw',
 		value: function _draw() {
-			var self = this;
+			var _this3 = this;
 
 			this.testing.forEach(function (node) {
-				self._drawNode(node, '#00FFFF');
+				_this3._drawNode(node, '#00FFFF');
 			});
 
 			this.complete.forEach(function (node) {
-				self._drawNode(node, '#0000FF');
+				_this3._drawNode(node, '#0000FF');
 			});
 		}
 	}, {
@@ -162,7 +163,7 @@ var Dijkstra = function (_PathAlgorithm) {
 		key: '_backTrack',
 		value: function _backTrack() {
 			var coordsA = this.endNode.theName.split(',');
-			var coordsB;
+			var coordsB = void 0;
 
 			this.endNode = this.endNode.working.previousNode;
 			coordsB = this.endNode.theName.split(',');
@@ -172,12 +173,13 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_foundEndNode',
 		value: function _foundEndNode() {
-			var self = this;
+			var _this4 = this;
+
 			var hasFound = false;
 
 			this.complete.forEach(function (node) {
-				if (self.graph.endNodes.indexOf(node) !== -1) {
-					self.endNode = self.endNode || node;
+				if (_this4.graph.endNodes.indexOf(node) !== -1) {
+					_this4.endNode = _this4.endNode || node;
 					hasFound = true;
 				}
 			});
@@ -187,21 +189,21 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_findAdjacentNodes',
 		value: function _findAdjacentNodes() {
-			var self = this;
+			var _this5 = this;
 
 			this.complete.forEach(function (node) {
 				node.edges.forEach(function (edge) {
-					var nodeObj = self._convertStringToNode(edge.endNode);
+					var nodeObj = _this5._convertStringToNode(edge.endNode);
 					var newDistance = node.working.shortestDistance + edge.val;
 
 					// Is not in testing array and not in complete array.
 					// In other words, if the node hasn't been seen by the algorithm yet.
-					if (self.testing.indexOf(nodeObj) === -1 && self.complete.indexOf(nodeObj) === -1) {
-						nodeObj.working = new self.NodeObj();
+					if (_this5.testing.indexOf(nodeObj) === -1 && _this5.complete.indexOf(nodeObj) === -1) {
+						nodeObj.working = new _this5.NodeObj();
 						nodeObj.working.shortestDistance = newDistance;
 						nodeObj.working.previousNode = node;
 
-						self.testing.push(nodeObj);
+						_this5.testing.push(nodeObj);
 					}
 					// Found shorter distance
 					else if (nodeObj.working.shortestDistance > newDistance) {
@@ -214,7 +216,7 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_lowestVertex',
 		value: function _lowestVertex() {
-			var lowest;
+			var lowest = void 0;
 
 			this.testing.forEach(function (node) {
 				lowest = lowest || node;
@@ -230,20 +232,20 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_addWorkingObj',
 		value: function _addWorkingObj(nodes) {
-			var self = this;
+			var _this6 = this;
 
 			nodes.forEach(function (node) {
-				node.working = new self.NodeObj();
+				node.working = new _this6.NodeObj();
 				node.working.shortestDistance = 0;
 			});
 		}
 	}, {
 		key: '_convertAllToNodes',
 		value: function _convertAllToNodes(nodes) {
-			var self = this;
+			var _this7 = this;
 
 			nodes.forEach(function (node) {
-				node = self._convertStringToNode(node);
+				node = _this7._convertStringToNode(node);
 			});
 		}
 	}, {
@@ -374,7 +376,10 @@ var Main = function Main() {
 		}
 	}
 
-	map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
+	for (var i = 0; i < Math.floor(Math.random() * 10); i += 1) {
+		map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
+	}
+
 	map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 3;
 
 	map.convertToGraph(graph);
@@ -424,10 +429,10 @@ var Map = function () {
 	_createClass(Map, [{
 		key: 'convertToGraph',
 		value: function convertToGraph(graph) {
-			var self = this;
+			var _this = this;
 
 			this._forEachCell(function (x, y) {
-				var cell = self.world[x][y];
+				var cell = _this.world[x][y];
 				var edges = [];
 
 				// Checks every square around the cell
@@ -435,8 +440,8 @@ var Map = function () {
 					for (var y1 = y - 1; y1 < y + 2; y1 += 1) {
 						try {
 							var isNotCentre = x1 !== x || y1 !== y;
-							var isNotWall = self.world[x1][y1] !== 1;
-							var isInWorld = x1 >= 0 && y1 >= 0 && x1 < self.maxLength && y1 < self.maxLength;
+							var isNotWall = _this.world[x1][y1] !== 1;
+							var isInWorld = x1 >= 0 && y1 >= 0 && x1 < _this.maxLength && y1 < _this.maxLength;
 
 							if (isNotCentre && isNotWall && isInWorld) {
 								var distance = Math.sqrt(Math.pow(x1 - x, 2) + Math.pow(y1 - y, 2));

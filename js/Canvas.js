@@ -22,8 +22,8 @@ export default class Canvas
 
 
 	static drawSquare(x, y, colour) {
-		var posX = this.posX * this.scaleFactor;
-		var posY = this.posY * this.scaleFactor;
+		let posX = this.posX * this.scaleFactor;
+		let posY = this.posY * this.scaleFactor;
 		x = Math.round(x * this.scaleFactor);
 		y = Math.round(y * this.scaleFactor);
 
@@ -32,10 +32,10 @@ export default class Canvas
 	}
 
 	static drawLine(x1, y1, x2, y2) {
-		var x1 = (x1 * this.scaleFactor) + (this.scaleFactor / 2);
-		var x2 = (x2 * this.scaleFactor) + (this.scaleFactor / 2);
-		var y1 = (y1 * this.scaleFactor) + (this.scaleFactor / 2);
-		var y2 = (y2 * this.scaleFactor) + (this.scaleFactor / 2);
+		x1 = (x1 * this.scaleFactor) + (this.scaleFactor / 2);
+		x2 = (x2 * this.scaleFactor) + (this.scaleFactor / 2);
+		y1 = (y1 * this.scaleFactor) + (this.scaleFactor / 2);
+		y2 = (y2 * this.scaleFactor) + (this.scaleFactor / 2);
 
 		this.ctx.beginPath();
 		this.ctx.moveTo(x1, y1);
