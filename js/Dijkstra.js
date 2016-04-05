@@ -7,7 +7,7 @@ export default class Dijkstra extends PathAlgorithm
 		super(graph);
 
 		this.algorithmName = 'Dijkstra';
-		this.complete = [];
+		this.complete = graph.startNodes.slice();
 		this.testing = [];
 		this.endNode;
 		this.NodeObj = function () {
@@ -23,13 +23,13 @@ export default class Dijkstra extends PathAlgorithm
 		this._addWorkingObj(this.complete);
 		setInterval(() => {
 			this.step();
+			this.draw();
 		}, 1);
 	}
 
 	step() {
 		if (!this._foundEndNode()) {
 			this._findAdjacentNodes();
-			this._draw();
 			this._lowestVertex();
 		}
 		else {
@@ -37,8 +37,7 @@ export default class Dijkstra extends PathAlgorithm
 		}
 	}
 
-
-	_draw() {
+	draw() {
 		this.testing.forEach((node) => {
 			this._drawNode(node, '#00FFFF');
 		});
@@ -46,7 +45,12 @@ export default class Dijkstra extends PathAlgorithm
 		this.complete.forEach((node) => {
 			this._drawNode(node, '#0000FF');
 		});
+
+		this.path.forEach((node) => {
+			Canvas.drawLine(node.x1, node.y1, node.x2, node.y2);
+		});
 	}
+
 
 	_drawNode(node, colour) {
 		let coords = node.theName.split(',');
@@ -61,7 +65,12 @@ export default class Dijkstra extends PathAlgorithm
 		this.endNode = this.endNode.working.previousNode;
 		coordsB = this.endNode.theName.split(',');
 
-		Canvas.drawLine(coordsA[0], coordsA[1], coordsB[0], coordsB[1]);
+		this.path.push({
+			x1: coordsA[0],
+			y1: coordsA[1],
+			x2: coordsB[0],
+			y2: coordsB[1]
+		});
 	}
 
 	_foundEndNode() {

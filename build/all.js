@@ -106,7 +106,7 @@ var Dijkstra = function (_PathAlgorithm) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dijkstra).call(this, graph));
 
 		_this.algorithmName = 'Dijkstra';
-		_this.complete = [];
+		_this.complete = graph.startNodes.slice();
 		_this.testing = [];
 		_this.endNode;
 		_this.NodeObj = function () {
@@ -126,6 +126,7 @@ var Dijkstra = function (_PathAlgorithm) {
 			this._addWorkingObj(this.complete);
 			setInterval(function () {
 				_this2.step();
+				_this2.draw();
 			}, 1);
 		}
 	}, {
@@ -133,15 +134,14 @@ var Dijkstra = function (_PathAlgorithm) {
 		value: function step() {
 			if (!this._foundEndNode()) {
 				this._findAdjacentNodes();
-				this._draw();
 				this._lowestVertex();
 			} else {
 				this._backTrack();
 			}
 		}
 	}, {
-		key: '_draw',
-		value: function _draw() {
+		key: 'draw',
+		value: function draw() {
 			var _this3 = this;
 
 			this.testing.forEach(function (node) {
@@ -150,6 +150,10 @@ var Dijkstra = function (_PathAlgorithm) {
 
 			this.complete.forEach(function (node) {
 				_this3._drawNode(node, '#0000FF');
+			});
+
+			this.path.forEach(function (node) {
+				_Canvas2.default.drawLine(node.x1, node.y1, node.x2, node.y2);
 			});
 		}
 	}, {
@@ -168,7 +172,12 @@ var Dijkstra = function (_PathAlgorithm) {
 			this.endNode = this.endNode.working.previousNode;
 			coordsB = this.endNode.theName.split(',');
 
-			_Canvas2.default.drawLine(coordsA[0], coordsA[1], coordsB[0], coordsB[1]);
+			this.path.push({
+				x1: coordsA[0],
+				y1: coordsA[1],
+				x2: coordsB[0],
+				y2: coordsB[1]
+			});
 		}
 	}, {
 		key: '_foundEndNode',
@@ -562,6 +571,7 @@ var PathAlgorithm = function () {
 
         this.graph = {};
         this.algorithmName = '';
+        this.path = [];
 
         this.selectGraph(graph);
     }
@@ -574,6 +584,9 @@ var PathAlgorithm = function () {
     }, {
         key: 'step',
         value: function step() {}
+    }, {
+        key: 'draw',
+        value: function draw() {}
     }]);
 
     return PathAlgorithm;

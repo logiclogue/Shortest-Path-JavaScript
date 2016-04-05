@@ -3,6 +3,7 @@ export default class PathAlgorithm
     constructor(graph) {
 		this.graph = {};
         this.algorithmName = '';
+        this.path = [];
 
         this.selectGraph(graph);
     }
@@ -13,4 +14,6 @@ export default class PathAlgorithm
     }
 
     step() {}
+
+    draw() {}
 }
