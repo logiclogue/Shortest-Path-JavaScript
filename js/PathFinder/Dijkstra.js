@@ -1,5 +1,5 @@
 import PathAlgorithm from './PathAlgorithm'
-import Canvas from './Canvas'
+import Canvas from '../Canvas/Canvas'
 
 export default class Dijkstra extends PathAlgorithm
 {
@@ -46,7 +46,7 @@ export default class Dijkstra extends PathAlgorithm
 			this._drawNode(node, '#0000FF');
 		});
 
-		this.path.forEach((node) => {
+		this.path.route.forEach((node) => {
 			Canvas.drawLine(node.x1, node.y1, node.x2, node.y2);
 		});
 	}
@@ -65,12 +65,7 @@ export default class Dijkstra extends PathAlgorithm
 		this.endNode = this.endNode.working.previousNode;
 		coordsB = this.endNode.theName.split(',');
 
-		this.path.push({
-			x1: coordsA[0],
-			y1: coordsA[1],
-			x2: coordsB[0],
-			y2: coordsB[1]
-		});
+		this.path.addLine(coordsA[0], coordsA[1], coordsB[0], coordsB[1]);
 	}
 
 	_foundEndNode() {

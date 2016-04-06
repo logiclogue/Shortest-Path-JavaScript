@@ -1,5 +1,5 @@
-import Canvas from './Canvas'
-import Edge from './Edge'
+import Canvas from './Canvas/Canvas'
+import Edge from './Graph/Edge'
 
 export default class Map
 {

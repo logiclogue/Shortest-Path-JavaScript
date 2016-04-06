@@ -73,202 +73,6 @@ var Canvas = function () {
 
 exports.default = Canvas;
 },{}],2:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _PathAlgorithm2 = require('./PathAlgorithm');
-
-var _PathAlgorithm3 = _interopRequireDefault(_PathAlgorithm2);
-
-var _Canvas = require('./Canvas');
-
-var _Canvas2 = _interopRequireDefault(_Canvas);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Dijkstra = function (_PathAlgorithm) {
-	_inherits(Dijkstra, _PathAlgorithm);
-
-	function Dijkstra(graph) {
-		_classCallCheck(this, Dijkstra);
-
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dijkstra).call(this, graph));
-
-		_this.algorithmName = 'Dijkstra';
-		_this.complete = graph.startNodes.slice();
-		_this.testing = [];
-		_this.endNode;
-		_this.NodeObj = function () {
-			this.shortestDistance;
-			this.previousNode;
-		};
-		return _this;
-	}
-
-	_createClass(Dijkstra, [{
-		key: 'run',
-		value: function run() {
-			var _this2 = this;
-
-			this.complete = this.graph.startNodes.slice();
-
-			this._addWorkingObj(this.complete);
-			setInterval(function () {
-				_this2.step();
-				_this2.draw();
-			}, 1);
-		}
-	}, {
-		key: 'step',
-		value: function step() {
-			if (!this._foundEndNode()) {
-				this._findAdjacentNodes();
-				this._lowestVertex();
-			} else {
-				this._backTrack();
-			}
-		}
-	}, {
-		key: 'draw',
-		value: function draw() {
-			var _this3 = this;
-
-			this.testing.forEach(function (node) {
-				_this3._drawNode(node, '#00FFFF');
-			});
-
-			this.complete.forEach(function (node) {
-				_this3._drawNode(node, '#0000FF');
-			});
-
-			this.path.forEach(function (node) {
-				_Canvas2.default.drawLine(node.x1, node.y1, node.x2, node.y2);
-			});
-		}
-	}, {
-		key: '_drawNode',
-		value: function _drawNode(node, colour) {
-			var coords = node.theName.split(',');
-
-			_Canvas2.default.drawSquare(coords[0], coords[1], colour);
-		}
-	}, {
-		key: '_backTrack',
-		value: function _backTrack() {
-			var coordsA = this.endNode.theName.split(',');
-			var coordsB = void 0;
-
-			this.endNode = this.endNode.working.previousNode;
-			coordsB = this.endNode.theName.split(',');
-
-			this.path.push({
-				x1: coordsA[0],
-				y1: coordsA[1],
-				x2: coordsB[0],
-				y2: coordsB[1]
-			});
-		}
-	}, {
-		key: '_foundEndNode',
-		value: function _foundEndNode() {
-			var _this4 = this;
-
-			var hasFound = false;
-
-			this.complete.forEach(function (node) {
-				if (_this4.graph.endNodes.indexOf(node) !== -1) {
-					_this4.endNode = _this4.endNode || node;
-					hasFound = true;
-				}
-			});
-
-			return hasFound;
-		}
-	}, {
-		key: '_findAdjacentNodes',
-		value: function _findAdjacentNodes() {
-			var _this5 = this;
-
-			this.complete.forEach(function (node) {
-				node.edges.forEach(function (edge) {
-					var nodeObj = _this5._convertStringToNode(edge.endNode);
-					var newDistance = node.working.shortestDistance + edge.val;
-
-					// Is not in testing array and not in complete array.
-					// In other words, if the node hasn't been seen by the algorithm yet.
-					if (_this5.testing.indexOf(nodeObj) === -1 && _this5.complete.indexOf(nodeObj) === -1) {
-						nodeObj.working = new _this5.NodeObj();
-						nodeObj.working.shortestDistance = newDistance;
-						nodeObj.working.previousNode = node;
-
-						_this5.testing.push(nodeObj);
-					}
-					// Found shorter distance
-					else if (nodeObj.working.shortestDistance > newDistance) {
-							nodeObj.working.shortestDistance = newDistance;
-							nodeObj.working.previousNode = node;
-						}
-				});
-			});
-		}
-	}, {
-		key: '_lowestVertex',
-		value: function _lowestVertex() {
-			var lowest = void 0;
-
-			this.testing.forEach(function (node) {
-				lowest = lowest || node;
-
-				if (node.working.shortestDistance < lowest.working.shortestDistance) {
-					lowest = node;
-				}
-			});
-
-			this.testing.splice(this.testing.indexOf(lowest), 1);
-			this.complete.push(lowest);
-		}
-	}, {
-		key: '_addWorkingObj',
-		value: function _addWorkingObj(nodes) {
-			var _this6 = this;
-
-			nodes.forEach(function (node) {
-				node.working = new _this6.NodeObj();
-				node.working.shortestDistance = 0;
-			});
-		}
-	}, {
-		key: '_convertAllToNodes',
-		value: function _convertAllToNodes(nodes) {
-			var _this7 = this;
-
-			nodes.forEach(function (node) {
-				node = _this7._convertStringToNode(node);
-			});
-		}
-	}, {
-		key: '_convertStringToNode',
-		value: function _convertStringToNode(string) {
-			return this.graph.nodes[string];
-		}
-	}]);
-
-	return Dijkstra;
-}(_PathAlgorithm3.default);
-
-exports.default = Dijkstra;
-},{"./Canvas":1,"./PathAlgorithm":8}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -285,7 +89,7 @@ var Edge = function Edge(endNode, val) {
 };
 
 exports.default = Edge;
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -341,22 +145,52 @@ var Graph = function () {
 }();
 
 exports.default = Graph;
-},{"./Edge":3,"./Node":7}],5:[function(require,module,exports){
+},{"./Edge":2,"./Node":4}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Node = function () {
+    function Node(name) {
+        _classCallCheck(this, Node);
+
+        this.theName = name;
+        this.edges = {};
+    }
+
+    _createClass(Node, [{
+        key: "addEdge",
+        value: function addEdge(startNode, endNode, value) {
+            this.edges.push(new Edge(endNode, value));
+        }
+    }]);
+
+    return Node;
+}();
+
+exports.default = Node;
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _Dijkstra = require('./Dijkstra');
+var _Dijkstra = require('./PathFinder/Dijkstra');
 
 var _Dijkstra2 = _interopRequireDefault(_Dijkstra);
 
-var _Canvas = require('./Canvas');
+var _Canvas = require('./Canvas/Canvas');
 
 var _Canvas2 = _interopRequireDefault(_Canvas);
 
-var _Graph = require('./Graph');
+var _Graph = require('./Graph/Graph');
 
 var _Graph2 = _interopRequireDefault(_Graph);
 
@@ -403,7 +237,7 @@ exports.default = Main;
 window.onload = function () {
 	var main = new Main();
 };
-},{"./Canvas":1,"./Dijkstra":2,"./Graph":4,"./Map":6}],6:[function(require,module,exports){
+},{"./Canvas/Canvas":1,"./Graph/Graph":3,"./Map":6,"./PathFinder/Dijkstra":7}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -412,11 +246,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Canvas = require('./Canvas');
+var _Canvas = require('./Canvas/Canvas');
 
 var _Canvas2 = _interopRequireDefault(_Canvas);
 
-var _Edge = require('./Edge');
+var _Edge = require('./Graph/Edge');
 
 var _Edge2 = _interopRequireDefault(_Edge);
 
@@ -524,7 +358,198 @@ var Map = function () {
 }();
 
 exports.default = Map;
-},{"./Canvas":1,"./Edge":3}],7:[function(require,module,exports){
+},{"./Canvas/Canvas":1,"./Graph/Edge":2}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _PathAlgorithm2 = require('./PathAlgorithm');
+
+var _PathAlgorithm3 = _interopRequireDefault(_PathAlgorithm2);
+
+var _Canvas = require('../Canvas/Canvas');
+
+var _Canvas2 = _interopRequireDefault(_Canvas);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Dijkstra = function (_PathAlgorithm) {
+	_inherits(Dijkstra, _PathAlgorithm);
+
+	function Dijkstra(graph) {
+		_classCallCheck(this, Dijkstra);
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dijkstra).call(this, graph));
+
+		_this.algorithmName = 'Dijkstra';
+		_this.complete = graph.startNodes.slice();
+		_this.testing = [];
+		_this.endNode;
+		_this.NodeObj = function () {
+			this.shortestDistance;
+			this.previousNode;
+		};
+		return _this;
+	}
+
+	_createClass(Dijkstra, [{
+		key: 'run',
+		value: function run() {
+			var _this2 = this;
+
+			this.complete = this.graph.startNodes.slice();
+
+			this._addWorkingObj(this.complete);
+			setInterval(function () {
+				_this2.step();
+				_this2.draw();
+			}, 1);
+		}
+	}, {
+		key: 'step',
+		value: function step() {
+			if (!this._foundEndNode()) {
+				this._findAdjacentNodes();
+				this._lowestVertex();
+			} else {
+				this._backTrack();
+			}
+		}
+	}, {
+		key: 'draw',
+		value: function draw() {
+			var _this3 = this;
+
+			this.testing.forEach(function (node) {
+				_this3._drawNode(node, '#00FFFF');
+			});
+
+			this.complete.forEach(function (node) {
+				_this3._drawNode(node, '#0000FF');
+			});
+
+			this.path.route.forEach(function (node) {
+				_Canvas2.default.drawLine(node.x1, node.y1, node.x2, node.y2);
+			});
+		}
+	}, {
+		key: '_drawNode',
+		value: function _drawNode(node, colour) {
+			var coords = node.theName.split(',');
+
+			_Canvas2.default.drawSquare(coords[0], coords[1], colour);
+		}
+	}, {
+		key: '_backTrack',
+		value: function _backTrack() {
+			var coordsA = this.endNode.theName.split(',');
+			var coordsB = void 0;
+
+			this.endNode = this.endNode.working.previousNode;
+			coordsB = this.endNode.theName.split(',');
+
+			this.path.addLine(coordsA[0], coordsA[1], coordsB[0], coordsB[1]);
+		}
+	}, {
+		key: '_foundEndNode',
+		value: function _foundEndNode() {
+			var _this4 = this;
+
+			var hasFound = false;
+
+			this.complete.forEach(function (node) {
+				if (_this4.graph.endNodes.indexOf(node) !== -1) {
+					_this4.endNode = _this4.endNode || node;
+					hasFound = true;
+				}
+			});
+
+			return hasFound;
+		}
+	}, {
+		key: '_findAdjacentNodes',
+		value: function _findAdjacentNodes() {
+			var _this5 = this;
+
+			this.complete.forEach(function (node) {
+				node.edges.forEach(function (edge) {
+					var nodeObj = _this5._convertStringToNode(edge.endNode);
+					var newDistance = node.working.shortestDistance + edge.val;
+
+					// Is not in testing array and not in complete array.
+					// In other words, if the node hasn't been seen by the algorithm yet.
+					if (_this5.testing.indexOf(nodeObj) === -1 && _this5.complete.indexOf(nodeObj) === -1) {
+						nodeObj.working = new _this5.NodeObj();
+						nodeObj.working.shortestDistance = newDistance;
+						nodeObj.working.previousNode = node;
+
+						_this5.testing.push(nodeObj);
+					}
+					// Found shorter distance
+					else if (nodeObj.working.shortestDistance > newDistance) {
+							nodeObj.working.shortestDistance = newDistance;
+							nodeObj.working.previousNode = node;
+						}
+				});
+			});
+		}
+	}, {
+		key: '_lowestVertex',
+		value: function _lowestVertex() {
+			var lowest = void 0;
+
+			this.testing.forEach(function (node) {
+				lowest = lowest || node;
+
+				if (node.working.shortestDistance < lowest.working.shortestDistance) {
+					lowest = node;
+				}
+			});
+
+			this.testing.splice(this.testing.indexOf(lowest), 1);
+			this.complete.push(lowest);
+		}
+	}, {
+		key: '_addWorkingObj',
+		value: function _addWorkingObj(nodes) {
+			var _this6 = this;
+
+			nodes.forEach(function (node) {
+				node.working = new _this6.NodeObj();
+				node.working.shortestDistance = 0;
+			});
+		}
+	}, {
+		key: '_convertAllToNodes',
+		value: function _convertAllToNodes(nodes) {
+			var _this7 = this;
+
+			nodes.forEach(function (node) {
+				node = _this7._convertStringToNode(node);
+			});
+		}
+	}, {
+		key: '_convertStringToNode',
+		value: function _convertStringToNode(string) {
+			return this.graph.nodes[string];
+		}
+	}]);
+
+	return Dijkstra;
+}(_PathAlgorithm3.default);
+
+exports.default = Dijkstra;
+},{"../Canvas/Canvas":1,"./PathAlgorithm":9}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -535,26 +560,30 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Node = function () {
-    function Node(name) {
-        _classCallCheck(this, Node);
+var Path = function () {
+    function Path() {
+        _classCallCheck(this, Path);
 
-        this.theName = name;
-        this.edges = {};
+        this.route = [];
     }
 
-    _createClass(Node, [{
-        key: "addEdge",
-        value: function addEdge(startNode, endNode, value) {
-            this.edges.push(new Edge(endNode, value));
+    _createClass(Path, [{
+        key: "addLine",
+        value: function addLine(x1, y1, x2, y2) {
+            this.route.push({
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2
+            });
         }
     }]);
 
-    return Node;
+    return Path;
 }();
 
-exports.default = Node;
-},{}],8:[function(require,module,exports){
+exports.default = Path;
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -562,6 +591,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Path = require('./Path');
+
+var _Path2 = _interopRequireDefault(_Path);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -571,7 +606,7 @@ var PathAlgorithm = function () {
 
         this.graph = {};
         this.algorithmName = '';
-        this.path = [];
+        this.path = new _Path2.default();
 
         this.selectGraph(graph);
     }
@@ -593,4 +628,4 @@ var PathAlgorithm = function () {
 }();
 
 exports.default = PathAlgorithm;
-},{}]},{},[5]);
+},{"./Path":8}]},{},[5]);

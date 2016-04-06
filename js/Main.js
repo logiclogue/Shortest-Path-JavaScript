@@ -1,6 +1,6 @@
-import Dijkstra from './Dijkstra'
-import Canvas from './Canvas'
-import Graph from './Graph'
+import Dijkstra from './PathFinder/Dijkstra'
+import Canvas from './Canvas/Canvas'
+import Graph from './Graph/Graph'
 import Map from './Map'
 
 export default class Main

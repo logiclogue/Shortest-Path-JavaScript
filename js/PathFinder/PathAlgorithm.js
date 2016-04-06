@@ -1,9 +1,11 @@
+import Path from './Path'
+
 export default class PathAlgorithm
 {
     constructor(graph) {
 		this.graph = {};
         this.algorithmName = '';
-        this.path = [];
+        this.path = new Path();
 
         this.selectGraph(graph);
     }
