@@ -6,6 +6,8 @@ export default class PathAlgorithm
 		this.graph = {};
         this.algorithmName = '';
         this.path = new Path();
+        this.isComplete = false;
+        this.foundPath = false;
 
         this.selectGraph(graph);
     }

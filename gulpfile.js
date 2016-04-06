@@ -8,7 +8,7 @@ var source = require('vinyl-source-stream');
 
 var paths = {
 	javascript: [
-		'js/*.js'
+		'js/**/*.js'
 	],
 	css: [
 		'css/*.css'

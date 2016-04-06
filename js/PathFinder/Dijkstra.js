@@ -28,11 +28,11 @@ export default class Dijkstra extends PathAlgorithm
 	}
 
 	step() {
-		if (!this._foundEndNode()) {
+		if (!this._foundEndNode() && !this.isComplete) {
 			this._findAdjacentNodes();
 			this._lowestVertex();
 		}
-		else {
+		else if (!this.isComplete) {
 			this._backTrack();
 		}
 	}
@@ -61,6 +61,14 @@ export default class Dijkstra extends PathAlgorithm
 	_backTrack() {
 		let coordsA = this.endNode.theName.split(',');
 		let coordsB;
+
+		// Check to see if found an end node
+		if (this.graph.startNodes.indexOf(this.endNode) !== -1) {
+			this.isComplete = true;
+			this.foundPath = true;
+
+			return;
+		}
 
 		this.endNode = this.endNode.working.previousNode;
 		coordsB = this.endNode.theName.split(',');
@@ -107,6 +115,12 @@ export default class Dijkstra extends PathAlgorithm
 
 	_lowestVertex() {
 		let lowest;
+
+		if (this.testing.length === 0) {
+			this.isComplete = true;
+
+			return;
+		}
 
 		this.testing.forEach((node) => {
 			lowest = lowest || node;

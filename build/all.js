@@ -418,10 +418,10 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: 'step',
 		value: function step() {
-			if (!this._foundEndNode()) {
+			if (!this._foundEndNode() && !this.isComplete) {
 				this._findAdjacentNodes();
 				this._lowestVertex();
-			} else {
+			} else if (!this.isComplete) {
 				this._backTrack();
 			}
 		}
@@ -454,6 +454,14 @@ var Dijkstra = function (_PathAlgorithm) {
 		value: function _backTrack() {
 			var coordsA = this.endNode.theName.split(',');
 			var coordsB = void 0;
+
+			// Check to see if found an end node
+			if (this.graph.startNodes.indexOf(this.endNode) !== -1) {
+				this.isComplete = true;
+				this.foundPath = true;
+
+				return;
+			}
 
 			this.endNode = this.endNode.working.previousNode;
 			coordsB = this.endNode.theName.split(',');
@@ -507,6 +515,12 @@ var Dijkstra = function (_PathAlgorithm) {
 		key: '_lowestVertex',
 		value: function _lowestVertex() {
 			var lowest = void 0;
+
+			if (this.testing.length === 0) {
+				this.isComplete = true;
+
+				return;
+			}
 
 			this.testing.forEach(function (node) {
 				lowest = lowest || node;
@@ -607,6 +621,8 @@ var PathAlgorithm = function () {
         this.graph = {};
         this.algorithmName = '';
         this.path = new _Path2.default();
+        this.isComplete = false;
+        this.foundPath = false;
 
         this.selectGraph(graph);
     }
