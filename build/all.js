@@ -230,7 +230,7 @@ var Main = function Main() {
 
 	setInterval(function () {
 		dijkstra.step();
-		map.drawOnCanvas();
+		map.draw();
 		dijkstra.draw();
 	}, 1);
 };
@@ -315,8 +315,8 @@ var Map = function () {
 			});
 		}
 	}, {
-		key: 'drawOnCanvas',
-		value: function drawOnCanvas() {
+		key: 'draw',
+		value: function draw() {
 			var colourIndex = this.colourIndex;
 
 			_Canvas2.default.clear();
@@ -441,6 +441,14 @@ var Dijkstra = function (_PathAlgorithm) {
 
 			this.complete.forEach(function (node) {
 				_this2._drawNode(node, '#0000FF');
+			});
+
+			this.graph.startNodes.forEach(function (node) {
+				_this2._drawNode(node, _Canvas2.default.colours.start);
+			});
+
+			this.graph.endNodes.forEach(function (node) {
+				_this2._drawNode(node, _Canvas2.default.colours.end);
 			});
 
 			this.path.route.forEach(function (node) {

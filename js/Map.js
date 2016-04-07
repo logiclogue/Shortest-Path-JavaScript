@@ -58,7 +58,7 @@ export default class Map
 		});
 	}
 
-	drawOnCanvas() {
+	draw() {
 		let colourIndex = this.colourIndex;
 
 		Canvas.clear();

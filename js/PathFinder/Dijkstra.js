@@ -15,7 +15,7 @@ export default class Dijkstra extends PathAlgorithm
 			this.previousNode;
 		};
 	}
-	
+
 
 	selectGraph(graph) {
 		if (typeof graph === 'undefined') {
@@ -45,6 +45,14 @@ export default class Dijkstra extends PathAlgorithm
 
 		this.complete.forEach((node) => {
 			this._drawNode(node, '#0000FF');
+		});
+
+		this.graph.startNodes.forEach((node) => {
+			this._drawNode(node, Canvas.colours.start);
+		});
+
+		this.graph.endNodes.forEach((node) => {
+			this._drawNode(node, Canvas.colours.end);
 		});
 
 		this.path.route.forEach((node) => {

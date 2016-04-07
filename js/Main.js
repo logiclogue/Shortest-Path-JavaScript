@@ -31,7 +31,7 @@ export default class Main
 
 		setInterval(() => {
 			dijkstra.step();
-			map.drawOnCanvas();
+			map.draw();
 			dijkstra.draw();
 		}, 1);
 	}
