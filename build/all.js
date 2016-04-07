@@ -24,7 +24,7 @@ var Canvas = function () {
 			this.width = this.c.width;
 			this.height = this.c.height;
 
-			this.scaleFactor = 50;
+			this.scaleFactor = 20;
 			this.posX = 0;
 			this.posY = 0;
 
@@ -209,7 +209,7 @@ var Main = function Main() {
 
 	var graph = new _Graph2.default();
 	var map = new _Map2.default();
-	var dijkstra = new _Dijkstra2.default(graph);
+	var dijkstra = new _Dijkstra2.default();
 
 	for (var x = 0; x < map.maxLength; x += 1) {
 		for (var y = 0; y < map.maxLength; y += 1) {
@@ -219,16 +219,20 @@ var Main = function Main() {
 		}
 	}
 
-	for (var i = 0; i < Math.floor(Math.random() * 10); i += 1) {
-		map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
-	}
+	//for (let i = 0; i < Math.floor(Math.random() * 2); i += 1) {
+	map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
+	//}
 
 	map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 3;
 
 	map.convertToGraph(graph);
-	map.drawOnCanvas();
+	dijkstra.selectGraph(graph);
 
-	dijkstra.run();
+	setInterval(function () {
+		dijkstra.step();
+		map.drawOnCanvas();
+		dijkstra.draw();
+	}, 1);
 };
 
 exports.default = Main;
@@ -367,6 +371,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 var _PathAlgorithm2 = require('./PathAlgorithm');
 
 var _PathAlgorithm3 = _interopRequireDefault(_PathAlgorithm2);
@@ -392,7 +398,7 @@ var Dijkstra = function (_PathAlgorithm) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dijkstra).call(this, graph));
 
 		_this.algorithmName = 'Dijkstra';
-		_this.complete = graph.startNodes.slice();
+		_this.complete;
 		_this.testing = [];
 		_this.endNode;
 		_this.NodeObj = function () {
@@ -403,17 +409,16 @@ var Dijkstra = function (_PathAlgorithm) {
 	}
 
 	_createClass(Dijkstra, [{
-		key: 'run',
-		value: function run() {
-			var _this2 = this;
+		key: 'selectGraph',
+		value: function selectGraph(graph) {
+			if (typeof graph === 'undefined') {
+				return;
+			}
 
-			this.complete = this.graph.startNodes.slice();
+			this.complete = graph.startNodes.slice();
 
 			this._addWorkingObj(this.complete);
-			setInterval(function () {
-				_this2.step();
-				_this2.draw();
-			}, 1);
+			_get(Object.getPrototypeOf(Dijkstra.prototype), 'selectGraph', this).call(this, graph);
 		}
 	}, {
 		key: 'step',
@@ -428,14 +433,14 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: 'draw',
 		value: function draw() {
-			var _this3 = this;
+			var _this2 = this;
 
 			this.testing.forEach(function (node) {
-				_this3._drawNode(node, '#00FFFF');
+				_this2._drawNode(node, '#00FFFF');
 			});
 
 			this.complete.forEach(function (node) {
-				_this3._drawNode(node, '#0000FF');
+				_this2._drawNode(node, '#0000FF');
 			});
 
 			this.path.route.forEach(function (node) {
@@ -471,13 +476,13 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_foundEndNode',
 		value: function _foundEndNode() {
-			var _this4 = this;
+			var _this3 = this;
 
 			var hasFound = false;
 
 			this.complete.forEach(function (node) {
-				if (_this4.graph.endNodes.indexOf(node) !== -1) {
-					_this4.endNode = _this4.endNode || node;
+				if (_this3.graph.endNodes.indexOf(node) !== -1) {
+					_this3.endNode = _this3.endNode || node;
 					hasFound = true;
 				}
 			});
@@ -487,21 +492,21 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_findAdjacentNodes',
 		value: function _findAdjacentNodes() {
-			var _this5 = this;
+			var _this4 = this;
 
 			this.complete.forEach(function (node) {
 				node.edges.forEach(function (edge) {
-					var nodeObj = _this5._convertStringToNode(edge.endNode);
+					var nodeObj = _this4._convertStringToNode(edge.endNode);
 					var newDistance = node.working.shortestDistance + edge.val;
 
 					// Is not in testing array and not in complete array.
 					// In other words, if the node hasn't been seen by the algorithm yet.
-					if (_this5.testing.indexOf(nodeObj) === -1 && _this5.complete.indexOf(nodeObj) === -1) {
-						nodeObj.working = new _this5.NodeObj();
+					if (_this4.testing.indexOf(nodeObj) === -1 && _this4.complete.indexOf(nodeObj) === -1) {
+						nodeObj.working = new _this4.NodeObj();
 						nodeObj.working.shortestDistance = newDistance;
 						nodeObj.working.previousNode = node;
 
-						_this5.testing.push(nodeObj);
+						_this4.testing.push(nodeObj);
 					}
 					// Found shorter distance
 					else if (nodeObj.working.shortestDistance > newDistance) {
@@ -536,20 +541,20 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_addWorkingObj',
 		value: function _addWorkingObj(nodes) {
-			var _this6 = this;
+			var _this5 = this;
 
 			nodes.forEach(function (node) {
-				node.working = new _this6.NodeObj();
+				node.working = new _this5.NodeObj();
 				node.working.shortestDistance = 0;
 			});
 		}
 	}, {
 		key: '_convertAllToNodes',
 		value: function _convertAllToNodes(nodes) {
-			var _this7 = this;
+			var _this6 = this;
 
 			nodes.forEach(function (node) {
-				node = _this7._convertStringToNode(node);
+				node = _this6._convertStringToNode(node);
 			});
 		}
 	}, {

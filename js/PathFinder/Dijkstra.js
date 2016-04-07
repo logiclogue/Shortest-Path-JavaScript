@@ -7,7 +7,7 @@ export default class Dijkstra extends PathAlgorithm
 		super(graph);
 
 		this.algorithmName = 'Dijkstra';
-		this.complete = graph.startNodes.slice();
+		this.complete;
 		this.testing = [];
 		this.endNode;
 		this.NodeObj = function () {
@@ -15,16 +15,17 @@ export default class Dijkstra extends PathAlgorithm
 			this.previousNode;
 		};
 	}
+	
 
+	selectGraph(graph) {
+		if (typeof graph === 'undefined') {
+			return;
+		}
 
-	run() {
-		this.complete = this.graph.startNodes.slice();
+		this.complete = graph.startNodes.slice();
 
 		this._addWorkingObj(this.complete);
-		setInterval(() => {
-			this.step();
-			this.draw();
-		}, 1);
+		super.selectGraph(graph);
 	}
 
 	step() {

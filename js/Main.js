@@ -10,7 +10,7 @@ export default class Main
 
 		let graph = new Graph();
 		let map = new Map();
-		let dijkstra = new Dijkstra(graph);
+		let dijkstra = new Dijkstra();
 
 		for (let x = 0; x < map.maxLength; x += 1) {
 			for (let y = 0; y < map.maxLength; y += 1) {
@@ -20,16 +20,20 @@ export default class Main
 			}
 		}
 
-		for (let i = 0; i < Math.floor(Math.random() * 10); i += 1) {
+		//for (let i = 0; i < Math.floor(Math.random() * 2); i += 1) {
 			map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
-		}
+		//}
 
 		map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 3;
 
 		map.convertToGraph(graph);
-		map.drawOnCanvas();
+		dijkstra.selectGraph(graph);
 
-		dijkstra.run();
+		setInterval(() => {
+			dijkstra.step();
+			map.drawOnCanvas();
+			dijkstra.draw();
+		}, 1);
 	}
 }
 

@@ -8,7 +8,7 @@ export default class Canvas
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.scaleFactor = 50;
+		this.scaleFactor = 20;
 		this.posX = 0;
 		this.posY = 0;
 
