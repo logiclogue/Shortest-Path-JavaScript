@@ -24,7 +24,7 @@ var Canvas = function () {
 			this.width = this.c.width;
 			this.height = this.c.height;
 
-			this.scaleFactor = 20;
+			this.scaleFactor = 40;
 			this.posX = 0;
 			this.posY = 0;
 
@@ -40,23 +40,25 @@ var Canvas = function () {
 		value: function drawSquare(x, y, colour) {
 			var posX = this.posX * this.scaleFactor;
 			var posY = this.posY * this.scaleFactor;
-			x = Math.round(x * this.scaleFactor);
-			y = Math.round(y * this.scaleFactor);
+			x = x * this.scaleFactor;
+			y = y * this.scaleFactor;
 
 			this.ctx.fillStyle = colour || this.colours.theDefault;
-			this.ctx.fillRect(x + posX, y + posY, this.scaleFactor, this.scaleFactor);
+			this.ctx.fillRect(Math.round(x + posX), Math.round(y + posY), Math.round(this.scaleFactor), Math.round(this.scaleFactor));
 		}
 	}, {
 		key: 'drawLine',
 		value: function drawLine(x1, y1, x2, y2) {
+			var posX = this.posX * this.scaleFactor;
+			var posY = this.posY * this.scaleFactor;
 			x1 = x1 * this.scaleFactor + this.scaleFactor / 2;
 			x2 = x2 * this.scaleFactor + this.scaleFactor / 2;
 			y1 = y1 * this.scaleFactor + this.scaleFactor / 2;
 			y2 = y2 * this.scaleFactor + this.scaleFactor / 2;
 
 			this.ctx.beginPath();
-			this.ctx.moveTo(x1, y1);
-			this.ctx.lineTo(x2, y2);
+			this.ctx.moveTo(x1 + posX, y1 + posY);
+			this.ctx.lineTo(x2 + posX, y2 + posY);
 			this.ctx.lineWidth = this.scaleFactor / 5;
 			this.ctx.lineCap = 'round';
 			this.ctx.stroke();
@@ -219,16 +221,15 @@ var Main = function Main() {
 		}
 	}
 
-	//for (let i = 0; i < Math.floor(Math.random() * 2); i += 1) {
 	map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
-	//}
-
 	map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 3;
 
 	map.convertToGraph(graph);
 	dijkstra.selectGraph(graph);
 
 	setInterval(function () {
+		_Canvas2.default.posX += 0.001;
+
 		dijkstra.step();
 		map.draw();
 		dijkstra.draw();

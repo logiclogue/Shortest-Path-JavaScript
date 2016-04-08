@@ -20,16 +20,15 @@ export default class Main
 			}
 		}
 
-		//for (let i = 0; i < Math.floor(Math.random() * 2); i += 1) {
-			map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
-		//}
-
+		map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
 		map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 3;
 
 		map.convertToGraph(graph);
 		dijkstra.selectGraph(graph);
 
 		setInterval(() => {
+			Canvas.posX += 0.001;
+
 			dijkstra.step();
 			map.draw();
 			dijkstra.draw();
