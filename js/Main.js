@@ -1,5 +1,6 @@
 import Dijkstra from './PathFinder/Dijkstra'
 import Canvas from './Canvas/Canvas'
+import Scroll from './Canvas/Scroll'
 import Graph from './Graph/Graph'
 import Map from './Map'
 
@@ -11,6 +12,7 @@ export default class Main
 		let graph = new Graph();
 		let map = new Map();
 		let dijkstra = new Dijkstra();
+		let scroll = new Scroll(Canvas);
 
 		for (let x = 0; x < map.maxLength; x += 1) {
 			for (let y = 0; y < map.maxLength; y += 1) {
@@ -27,8 +29,6 @@ export default class Main
 		dijkstra.selectGraph(graph);
 
 		setInterval(() => {
-			Canvas.posX += 0.001;
-
 			dijkstra.step();
 			map.draw();
 			dijkstra.draw();

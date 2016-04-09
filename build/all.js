@@ -75,6 +75,74 @@ var Canvas = function () {
 
 exports.default = Canvas;
 },{}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Scroll = function () {
+    function Scroll(canvas) {
+        _classCallCheck(this, Scroll);
+
+        this.canvas = canvas;
+        this.element = canvas.c;
+        this.startX = 0;
+        this.startY = 0;
+        this.isMoving = false;
+
+        this.setEvents();
+    }
+
+    _createClass(Scroll, [{
+        key: 'setEvents',
+        value: function setEvents() {
+            this.element.addEventListener('mousedown', this._mousedown.bind(this));
+            this.element.addEventListener('mouseup', this._mouseup.bind(this));
+            this.element.addEventListener('mousemove', this._mousemove.bind(this));
+        }
+    }, {
+        key: 'removeEvents',
+        value: function removeEvents() {
+            this.element.removeEventListener('mousedown', this._mousedown);
+            this.element.removeEventListener('mouseup', this._mouseup);
+            this.element.removeEventListener('mouseMove', this._mousemove);
+        }
+    }, {
+        key: '_mousedown',
+        value: function _mousedown(e) {
+            this.isMoving = true;
+            this.startX = e.pageX;
+            this.startY = e.pageY;
+        }
+    }, {
+        key: '_mouseup',
+        value: function _mouseup(e) {
+            this.isMoving = false;
+        }
+    }, {
+        key: '_mousemove',
+        value: function _mousemove(e) {
+            console.log(this.canvas.posX);
+            if (this.isMoving) {
+                this.canvas.posX -= (this.startX - e.pageX) / this.canvas.scaleFactor;
+                this.canvas.posY -= (this.startY - e.pageY) / this.canvas.scaleFactor;
+            }
+
+            this.startX = e.pageX;
+            this.startY = e.pageY;
+        }
+    }]);
+
+    return Scroll;
+}();
+
+exports.default = Scroll;
+},{}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -91,7 +159,7 @@ var Edge = function Edge(endNode, val) {
 };
 
 exports.default = Edge;
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -147,7 +215,7 @@ var Graph = function () {
 }();
 
 exports.default = Graph;
-},{"./Edge":2,"./Node":4}],4:[function(require,module,exports){
+},{"./Edge":3,"./Node":5}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -177,7 +245,7 @@ var Node = function () {
 }();
 
 exports.default = Node;
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -191,6 +259,10 @@ var _Dijkstra2 = _interopRequireDefault(_Dijkstra);
 var _Canvas = require('./Canvas/Canvas');
 
 var _Canvas2 = _interopRequireDefault(_Canvas);
+
+var _Scroll = require('./Canvas/Scroll');
+
+var _Scroll2 = _interopRequireDefault(_Scroll);
 
 var _Graph = require('./Graph/Graph');
 
@@ -212,6 +284,7 @@ var Main = function Main() {
 	var graph = new _Graph2.default();
 	var map = new _Map2.default();
 	var dijkstra = new _Dijkstra2.default();
+	var scroll = new _Scroll2.default(_Canvas2.default);
 
 	for (var x = 0; x < map.maxLength; x += 1) {
 		for (var y = 0; y < map.maxLength; y += 1) {
@@ -228,8 +301,6 @@ var Main = function Main() {
 	dijkstra.selectGraph(graph);
 
 	setInterval(function () {
-		_Canvas2.default.posX += 0.001;
-
 		dijkstra.step();
 		map.draw();
 		dijkstra.draw();
@@ -242,7 +313,7 @@ exports.default = Main;
 window.onload = function () {
 	var main = new Main();
 };
-},{"./Canvas/Canvas":1,"./Graph/Graph":3,"./Map":6,"./PathFinder/Dijkstra":7}],6:[function(require,module,exports){
+},{"./Canvas/Canvas":1,"./Canvas/Scroll":2,"./Graph/Graph":4,"./Map":7,"./PathFinder/Dijkstra":8}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -363,7 +434,7 @@ var Map = function () {
 }();
 
 exports.default = Map;
-},{"./Canvas/Canvas":1,"./Graph/Edge":2}],7:[function(require,module,exports){
+},{"./Canvas/Canvas":1,"./Graph/Edge":3}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -577,7 +648,7 @@ var Dijkstra = function (_PathAlgorithm) {
 }(_PathAlgorithm3.default);
 
 exports.default = Dijkstra;
-},{"../Canvas/Canvas":1,"./PathAlgorithm":9}],8:[function(require,module,exports){
+},{"../Canvas/Canvas":1,"./PathAlgorithm":10}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -611,7 +682,7 @@ var Path = function () {
 }();
 
 exports.default = Path;
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -658,4 +729,4 @@ var PathAlgorithm = function () {
 }();
 
 exports.default = PathAlgorithm;
-},{"./Path":8}]},{},[5]);
+},{"./Path":9}]},{},[6]);
