@@ -40,11 +40,15 @@ var Canvas = function () {
 		value: function drawSquare(x, y, colour) {
 			var posX = this.posX * this.scaleFactor;
 			var posY = this.posY * this.scaleFactor;
-			x = x * this.scaleFactor;
-			y = y * this.scaleFactor;
+			x *= this.scaleFactor;
+			y *= this.scaleFactor;
+			var startX = Math.round(x + posX) + this.width / 2;
+			var startY = Math.round(y + posY) + this.height / 2;
+			var width = this.scaleFactor;
+			var height = this.scaleFactor;
 
 			this.ctx.fillStyle = colour || this.colours.theDefault;
-			this.ctx.fillRect(Math.round(x + posX), Math.round(y + posY), Math.round(this.scaleFactor), Math.round(this.scaleFactor));
+			this.ctx.fillRect(startX, startY, width, height);
 		}
 	}, {
 		key: 'drawLine',
@@ -55,10 +59,14 @@ var Canvas = function () {
 			x2 = x2 * this.scaleFactor + this.scaleFactor / 2;
 			y1 = y1 * this.scaleFactor + this.scaleFactor / 2;
 			y2 = y2 * this.scaleFactor + this.scaleFactor / 2;
+			var startX = x1 + posX + this.width / 2;
+			var startY = y1 + posY + this.height / 2;
+			var endX = x2 + posX + this.width / 2;
+			var endY = y2 + posY + this.height / 2;
 
 			this.ctx.beginPath();
-			this.ctx.moveTo(x1 + posX, y1 + posY);
-			this.ctx.lineTo(x2 + posX, y2 + posY);
+			this.ctx.moveTo(startX, startY);
+			this.ctx.lineTo(endX, endY);
 			this.ctx.lineWidth = this.scaleFactor / 5;
 			this.ctx.lineCap = 'round';
 			this.ctx.stroke();
@@ -104,13 +112,15 @@ var Scroll = function () {
             this.element.addEventListener('mousedown', this._mousedown.bind(this));
             this.element.addEventListener('mouseup', this._mouseup.bind(this));
             this.element.addEventListener('mousemove', this._mousemove.bind(this));
+            this.element.addEventListener('wheel', this._zoom.bind(this));
         }
     }, {
         key: 'removeEvents',
         value: function removeEvents() {
-            this.element.removeEventListener('mousedown', this._mousedown);
-            this.element.removeEventListener('mouseup', this._mouseup);
-            this.element.removeEventListener('mouseMove', this._mousemove);
+            this.element.removeEventListener('mousedown', this._mousedown.bind(this));
+            this.element.removeEventListener('mouseup', this._mouseup.bind(this));
+            this.element.removeEventListener('mouseMove', this._mousemove.bind(this));
+            this.element.removeEventListener('wheel', this._zoom.bind(this));
         }
     }, {
         key: '_mousedown',
@@ -127,7 +137,6 @@ var Scroll = function () {
     }, {
         key: '_mousemove',
         value: function _mousemove(e) {
-            console.log(this.canvas.posX);
             if (this.isMoving) {
                 this.canvas.posX -= (this.startX - e.pageX) / this.canvas.scaleFactor;
                 this.canvas.posY -= (this.startY - e.pageY) / this.canvas.scaleFactor;
@@ -135,6 +144,14 @@ var Scroll = function () {
 
             this.startX = e.pageX;
             this.startY = e.pageY;
+        }
+    }, {
+        key: '_zoom',
+        value: function _zoom(e) {
+            e.preventDefault();
+
+            this.canvas.scaleFactor += e.wheelDelta / 100;
+            this.canvas.scaleFactor = Math.round(this.canvas.scaleFactor);
         }
     }]);
 

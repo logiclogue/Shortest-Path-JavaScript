@@ -15,12 +15,14 @@ export default class Scroll
         this.element.addEventListener('mousedown', this._mousedown.bind(this));
         this.element.addEventListener('mouseup', this._mouseup.bind(this));
         this.element.addEventListener('mousemove', this._mousemove.bind(this));
+        this.element.addEventListener('wheel', this._zoom.bind(this));
     }
 
     removeEvents() {
-        this.element.removeEventListener('mousedown', this._mousedown);
-        this.element.removeEventListener('mouseup', this._mouseup);
-        this.element.removeEventListener('mouseMove', this._mousemove);
+        this.element.removeEventListener('mousedown', this._mousedown.bind(this));
+        this.element.removeEventListener('mouseup', this._mouseup.bind(this));
+        this.element.removeEventListener('mouseMove', this._mousemove.bind(this));
+        this.element.removeEventListener('wheel', this._zoom.bind(this));
     }
 
 
@@ -35,7 +37,6 @@ export default class Scroll
     }
 
     _mousemove(e) {
-        console.log(this.canvas.posX);
         if (this.isMoving) {
             this.canvas.posX -= (this.startX - e.pageX) / this.canvas.scaleFactor;
             this.canvas.posY -= (this.startY - e.pageY) / this.canvas.scaleFactor;
@@ -43,5 +44,12 @@ export default class Scroll
 
         this.startX = e.pageX;
         this.startY = e.pageY;
+    }
+
+    _zoom(e) {
+        e.preventDefault();
+
+        this.canvas.scaleFactor += e.wheelDelta / 100;
+        this.canvas.scaleFactor = Math.round(this.canvas.scaleFactor);
     }
 }
