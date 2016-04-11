@@ -8,7 +8,7 @@ export default class Canvas
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.zoom = 32;
+		this._zoom = 4;
 		this.scaleFactor = Math.pow(2, this.zoom);
 		this.posX = 0;
 		this.posY = 0;
@@ -23,10 +23,12 @@ export default class Canvas
 
 
 	set zoom(value) {
-		debugger;
-		this.scaleFactor = Math.pow(2, value);
+		this._zoom = value;
+		this.scaleFactor = Math.round(Math.pow(2, value));
+	}
 
-		return value;
+	get zoom() {
+		return this._zoom;
 	}
 
 

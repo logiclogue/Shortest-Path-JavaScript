@@ -38,8 +38,8 @@ export default class Scroll
 
     _mousemove(e) {
         if (this.isMoving) {
-            this.canvas.posX -= (this.startX - e.pageX) / this.canvas.zoom;
-            this.canvas.posY -= (this.startY - e.pageY) / this.canvas.zoom;
+            this.canvas.posX -= (this.startX - e.pageX) / this.canvas.scaleFactor;
+            this.canvas.posY -= (this.startY - e.pageY) / this.canvas.scaleFactor;
         }
 
         this.startX = e.pageX;
@@ -49,8 +49,6 @@ export default class Scroll
     _zoom(e) {
         e.preventDefault();
 
-        console.log(this.canvas.zoom);
-        this.canvas.zoom = this.canvas.zoom + e.wheelDelta;
-        this.canvas.zoom = Math.round(this.canvas.zoom);
+        this.canvas.zoom = this.canvas.zoom + (e.wheelDelta / 1000);
     }
 }

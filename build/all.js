@@ -20,7 +20,7 @@ var Canvas = function () {
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.zoom = 32;
+		this._zoom = 4;
 		this.scaleFactor = Math.pow(2, this.zoom);
 		this.posX = 0;
 		this.posY = 0;
@@ -77,10 +77,11 @@ var Canvas = function () {
 	}, {
 		key: 'zoom',
 		set: function set(value) {
-			debugger;
-			this.scaleFactor = Math.pow(2, value);
-
-			return value;
+			this._zoom = value;
+			this.scaleFactor = Math.round(Math.pow(2, value));
+		},
+		get: function get() {
+			return this._zoom;
 		}
 	}]);
 
@@ -144,8 +145,8 @@ var Scroll = function () {
         key: '_mousemove',
         value: function _mousemove(e) {
             if (this.isMoving) {
-                this.canvas.posX -= (this.startX - e.pageX) / this.canvas.zoom;
-                this.canvas.posY -= (this.startY - e.pageY) / this.canvas.zoom;
+                this.canvas.posX -= (this.startX - e.pageX) / this.canvas.scaleFactor;
+                this.canvas.posY -= (this.startY - e.pageY) / this.canvas.scaleFactor;
             }
 
             this.startX = e.pageX;
@@ -156,9 +157,7 @@ var Scroll = function () {
         value: function _zoom(e) {
             e.preventDefault();
 
-            console.log(this.canvas.zoom);
-            this.canvas.zoom = this.canvas.zoom + e.wheelDelta;
-            this.canvas.zoom = Math.round(this.canvas.zoom);
+            this.canvas.zoom = this.canvas.zoom + e.wheelDelta / 1000;
         }
     }]);
 
