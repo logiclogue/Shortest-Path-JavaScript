@@ -266,9 +266,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _Dijkstra = require('./PathFinder/Dijkstra');
+var _DijkstraDraw = require('./PathFinder/DijkstraDraw');
 
-var _Dijkstra2 = _interopRequireDefault(_Dijkstra);
+var _DijkstraDraw2 = _interopRequireDefault(_DijkstraDraw);
 
 var _Canvas = require('./Canvas/Canvas');
 
@@ -296,7 +296,7 @@ var Main = function Main() {
 	var canvas = new _Canvas2.default('main-canvas');
 	var graph = new _Graph2.default();
 	var map = new _Map2.default(canvas);
-	var dijkstra = new _Dijkstra2.default(undefined, canvas);
+	var dijkstra = new _DijkstraDraw2.default(undefined, canvas);
 	var scroll = new _Scroll2.default(canvas);
 
 	for (var x = 0; x < map.maxLength; x += 1) {
@@ -326,7 +326,7 @@ exports.default = Main;
 window.onload = function () {
 	var main = new Main();
 };
-},{"./Canvas/Canvas":1,"./Canvas/Scroll":2,"./Graph/Graph":4,"./Map":7,"./PathFinder/Dijkstra":8}],7:[function(require,module,exports){
+},{"./Canvas/Canvas":1,"./Canvas/Scroll":2,"./Graph/Graph":4,"./Map":7,"./PathFinder/DijkstraDraw":9}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -477,7 +477,6 @@ var Dijkstra = function (_PathAlgorithm) {
 
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dijkstra).call(this, graph));
 
-		_this.canvas = canvas;
 		_this.complete;
 		_this.testing = [];
 		_this.algorithmName = 'Dijkstra';
@@ -512,38 +511,6 @@ var Dijkstra = function (_PathAlgorithm) {
 			}
 		}
 	}, {
-		key: 'draw',
-		value: function draw() {
-			var _this2 = this;
-
-			this.testing.forEach(function (node) {
-				_this2._drawNode(node, '#00FFFF');
-			});
-
-			this.complete.forEach(function (node) {
-				_this2._drawNode(node, '#0000FF');
-			});
-
-			this.graph.startNodes.forEach(function (node) {
-				_this2._drawNode(node, _this2.canvas.colours.start);
-			});
-
-			this.graph.endNodes.forEach(function (node) {
-				_this2._drawNode(node, _this2.canvas.colours.end);
-			});
-
-			this.path.route.forEach(function (node) {
-				_this2.canvas.drawLine(node.x1, node.y1, node.x2, node.y2);
-			});
-		}
-	}, {
-		key: '_drawNode',
-		value: function _drawNode(node, colour) {
-			var coords = node.theName.split(',');
-
-			this.canvas.drawSquare(coords[0], coords[1], colour);
-		}
-	}, {
 		key: '_backTrack',
 		value: function _backTrack() {
 			var coordsA = this.endNode.theName.split(',');
@@ -565,13 +532,13 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_foundEndNode',
 		value: function _foundEndNode() {
-			var _this3 = this;
+			var _this2 = this;
 
 			var hasFound = false;
 
 			this.complete.forEach(function (node) {
-				if (_this3.graph.endNodes.indexOf(node) !== -1) {
-					_this3.endNode = _this3.endNode || node;
+				if (_this2.graph.endNodes.indexOf(node) !== -1) {
+					_this2.endNode = _this2.endNode || node;
 					hasFound = true;
 				}
 			});
@@ -581,21 +548,21 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_findAdjacentNodes',
 		value: function _findAdjacentNodes() {
-			var _this4 = this;
+			var _this3 = this;
 
 			this.complete.forEach(function (node) {
 				node.edges.forEach(function (edge) {
-					var nodeObj = _this4._convertStringToNode(edge.endNode);
+					var nodeObj = _this3._convertStringToNode(edge.endNode);
 					var newDistance = node.working.shortestDistance + edge.val;
 
 					// Is not in testing array and not in complete array.
 					// In other words, if the node hasn't been seen by the algorithm yet.
-					if (_this4.testing.indexOf(nodeObj) === -1 && _this4.complete.indexOf(nodeObj) === -1) {
-						nodeObj.working = new _this4.NodeObj();
+					if (_this3.testing.indexOf(nodeObj) === -1 && _this3.complete.indexOf(nodeObj) === -1) {
+						nodeObj.working = new _this3.NodeObj();
 						nodeObj.working.shortestDistance = newDistance;
 						nodeObj.working.previousNode = node;
 
-						_this4.testing.push(nodeObj);
+						_this3.testing.push(nodeObj);
 					}
 					// Found shorter distance
 					else if (nodeObj.working.shortestDistance > newDistance) {
@@ -630,20 +597,20 @@ var Dijkstra = function (_PathAlgorithm) {
 	}, {
 		key: '_addWorkingObj',
 		value: function _addWorkingObj(nodes) {
-			var _this5 = this;
+			var _this4 = this;
 
 			nodes.forEach(function (node) {
-				node.working = new _this5.NodeObj();
+				node.working = new _this4.NodeObj();
 				node.working.shortestDistance = 0;
 			});
 		}
 	}, {
 		key: '_convertAllToNodes',
 		value: function _convertAllToNodes(nodes) {
-			var _this6 = this;
+			var _this5 = this;
 
 			nodes.forEach(function (node) {
-				node = _this6._convertStringToNode(node);
+				node = _this5._convertStringToNode(node);
 			});
 		}
 	}, {
@@ -657,7 +624,78 @@ var Dijkstra = function (_PathAlgorithm) {
 }(_PathAlgorithm3.default);
 
 exports.default = Dijkstra;
-},{"./PathAlgorithm":10}],9:[function(require,module,exports){
+},{"./PathAlgorithm":11}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Dijkstra2 = require('./Dijkstra');
+
+var _Dijkstra3 = _interopRequireDefault(_Dijkstra2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DijkstraDraw = function (_Dijkstra) {
+	_inherits(DijkstraDraw, _Dijkstra);
+
+	function DijkstraDraw(graph, canvas) {
+		_classCallCheck(this, DijkstraDraw);
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DijkstraDraw).call(this, graph));
+
+		_this.canvas = canvas || {};
+		return _this;
+	}
+
+	_createClass(DijkstraDraw, [{
+		key: 'draw',
+		value: function draw() {
+			var _this2 = this;
+
+			this.testing.forEach(function (node) {
+				_this2._drawNode(node, '#00FFFF');
+			});
+
+			this.complete.forEach(function (node) {
+				_this2._drawNode(node, '#0000FF');
+			});
+
+			this.graph.startNodes.forEach(function (node) {
+				_this2._drawNode(node, _this2.canvas.colours.start);
+			});
+
+			this.graph.endNodes.forEach(function (node) {
+				_this2._drawNode(node, _this2.canvas.colours.end);
+			});
+
+			this.path.route.forEach(function (node) {
+				_this2.canvas.drawLine(node.x1, node.y1, node.x2, node.y2);
+			});
+		}
+	}, {
+		key: '_drawNode',
+		value: function _drawNode(node, colour) {
+			var coords = node.theName.split(',');
+
+			this.canvas.drawSquare(coords[0], coords[1], colour);
+		}
+	}]);
+
+	return DijkstraDraw;
+}(_Dijkstra3.default);
+
+exports.default = DijkstraDraw;
+},{"./Dijkstra":8}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -691,7 +729,7 @@ var Path = function () {
 }();
 
 exports.default = Path;
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -729,13 +767,10 @@ var PathAlgorithm = function () {
     }, {
         key: 'step',
         value: function step() {}
-    }, {
-        key: 'draw',
-        value: function draw() {}
     }]);
 
     return PathAlgorithm;
 }();
 
 exports.default = PathAlgorithm;
-},{"./Path":9}]},{},[6]);
+},{"./Path":10}]},{},[6]);

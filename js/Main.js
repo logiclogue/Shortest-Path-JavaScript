@@ -1,4 +1,4 @@
-import Dijkstra from './PathFinder/Dijkstra'
+import DijkstraDraw from './PathFinder/DijkstraDraw'
 import Canvas from './Canvas/Canvas'
 import Scroll from './Canvas/Scroll'
 import Graph from './Graph/Graph'
@@ -10,7 +10,7 @@ export default class Main
 		let canvas = new Canvas('main-canvas');
 		let graph = new Graph();
 		let map = new Map(canvas);
-		let dijkstra = new Dijkstra(undefined, canvas);
+		let dijkstra = new DijkstraDraw(undefined, canvas);
 		let scroll = new Scroll(canvas);
 
 		for (let x = 0; x < map.maxLength; x += 1) {
