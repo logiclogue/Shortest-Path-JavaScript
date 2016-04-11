@@ -1,14 +1,14 @@
 import PathAlgorithm from './PathAlgorithm'
-import Canvas from '../Canvas/Canvas'
 
 export default class Dijkstra extends PathAlgorithm
 {
-	constructor(graph) {
+	constructor(graph, canvas) {
 		super(graph);
 
-		this.algorithmName = 'Dijkstra';
+		this.canvas = canvas;
 		this.complete;
 		this.testing = [];
+		this.algorithmName = 'Dijkstra';
 		this.endNode;
 		this.NodeObj = function () {
 			this.shortestDistance;
@@ -48,15 +48,15 @@ export default class Dijkstra extends PathAlgorithm
 		});
 
 		this.graph.startNodes.forEach((node) => {
-			this._drawNode(node, Canvas.colours.start);
+			this._drawNode(node, this.canvas.colours.start);
 		});
 
 		this.graph.endNodes.forEach((node) => {
-			this._drawNode(node, Canvas.colours.end);
+			this._drawNode(node, this.canvas.colours.end);
 		});
 
 		this.path.route.forEach((node) => {
-			Canvas.drawLine(node.x1, node.y1, node.x2, node.y2);
+			this.canvas.drawLine(node.x1, node.y1, node.x2, node.y2);
 		});
 	}
 
@@ -64,7 +64,7 @@ export default class Dijkstra extends PathAlgorithm
 	_drawNode(node, colour) {
 		let coords = node.theName.split(',');
 
-		Canvas.drawSquare(coords[0], coords[1], colour);
+		this.canvas.drawSquare(coords[0], coords[1], colour);
 	}
 
 	_backTrack() {

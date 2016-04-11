@@ -10,32 +10,29 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Canvas = function () {
-	function Canvas() {
+	function Canvas(elementId) {
 		_classCallCheck(this, Canvas);
+
+		this.c = document.getElementById(elementId);
+		this.c.width = window.innerWidth;
+		this.c.height = window.innerHeight;
+		this.ctx = this.c.getContext('2d');
+		this.width = this.c.width;
+		this.height = this.c.height;
+
+		this.scaleFactor = 40;
+		this.posX = 0;
+		this.posY = 0;
+
+		this.colours = {
+			start: '#00FF00',
+			end: '#FF0000',
+			theDefault: '#DDDDDD',
+			wall: '#000000'
+		};
 	}
 
-	_createClass(Canvas, null, [{
-		key: 'init',
-		value: function init() {
-			this.c = document.getElementById('main-canvas');
-			this.c.width = window.innerWidth;
-			this.c.height = window.innerHeight;
-			this.ctx = this.c.getContext('2d');
-			this.width = this.c.width;
-			this.height = this.c.height;
-
-			this.scaleFactor = 40;
-			this.posX = 0;
-			this.posY = 0;
-
-			this.colours = {
-				start: '#00FF00',
-				end: '#FF0000',
-				theDefault: '#DDDDDD',
-				wall: '#000000'
-			};
-		}
-	}, {
+	_createClass(Canvas, [{
 		key: 'drawSquare',
 		value: function drawSquare(x, y, colour) {
 			var posX = this.posX * this.scaleFactor;
@@ -94,11 +91,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Scroll = function () {
-    function Scroll(canvas) {
+    function Scroll(canvas, element) {
         _classCallCheck(this, Scroll);
 
         this.canvas = canvas;
-        this.element = canvas.c;
+        this.element = canvas.c || element;
         this.startX = 0;
         this.startY = 0;
         this.isMoving = false;
@@ -296,12 +293,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Main = function Main() {
 	_classCallCheck(this, Main);
 
-	_Canvas2.default.init();
-
+	var canvas = new _Canvas2.default('main-canvas');
 	var graph = new _Graph2.default();
-	var map = new _Map2.default();
-	var dijkstra = new _Dijkstra2.default();
-	var scroll = new _Scroll2.default(_Canvas2.default);
+	var map = new _Map2.default(canvas);
+	var dijkstra = new _Dijkstra2.default(undefined, canvas);
+	var scroll = new _Scroll2.default(canvas);
 
 	for (var x = 0; x < map.maxLength; x += 1) {
 		for (var y = 0; y < map.maxLength; y += 1) {
@@ -339,10 +335,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Canvas = require('./Canvas/Canvas');
-
-var _Canvas2 = _interopRequireDefault(_Canvas);
-
 var _Edge = require('./Graph/Edge');
 
 var _Edge2 = _interopRequireDefault(_Edge);
@@ -352,12 +344,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Map = function () {
-	function Map() {
+	function Map(canvas) {
 		_classCallCheck(this, Map);
 
+		this.canvas = canvas;
 		this.world = [];
 		this.maxLength = 20;
-		this.colourIndex = [_Canvas2.default.colours.theDefault, _Canvas2.default.colours.wall, _Canvas2.default.colours.start, _Canvas2.default.colours.end];
+		this.colourIndex = [this.canvas.colours.theDefault, this.canvas.colours.wall, this.canvas.colours.start, this.canvas.colours.end];
 
 		this._populateMap();
 	}
@@ -406,13 +399,15 @@ var Map = function () {
 	}, {
 		key: 'draw',
 		value: function draw() {
+			var _this2 = this;
+
 			var colourIndex = this.colourIndex;
 
-			_Canvas2.default.clear();
+			this.canvas.clear();
 
 			this.world.forEach(function (row, x) {
 				row.forEach(function (cell, y) {
-					_Canvas2.default.drawSquare(x, y, colourIndex[cell]);
+					_this2.canvas.drawSquare(x, y, colourIndex[cell]);
 				});
 			});
 		}
@@ -451,7 +446,7 @@ var Map = function () {
 }();
 
 exports.default = Map;
-},{"./Canvas/Canvas":1,"./Graph/Edge":3}],8:[function(require,module,exports){
+},{"./Graph/Edge":3}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -466,10 +461,6 @@ var _PathAlgorithm2 = require('./PathAlgorithm');
 
 var _PathAlgorithm3 = _interopRequireDefault(_PathAlgorithm2);
 
-var _Canvas = require('../Canvas/Canvas');
-
-var _Canvas2 = _interopRequireDefault(_Canvas);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -481,14 +472,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Dijkstra = function (_PathAlgorithm) {
 	_inherits(Dijkstra, _PathAlgorithm);
 
-	function Dijkstra(graph) {
+	function Dijkstra(graph, canvas) {
 		_classCallCheck(this, Dijkstra);
 
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dijkstra).call(this, graph));
 
-		_this.algorithmName = 'Dijkstra';
+		_this.canvas = canvas;
 		_this.complete;
 		_this.testing = [];
+		_this.algorithmName = 'Dijkstra';
 		_this.endNode;
 		_this.NodeObj = function () {
 			this.shortestDistance;
@@ -533,15 +525,15 @@ var Dijkstra = function (_PathAlgorithm) {
 			});
 
 			this.graph.startNodes.forEach(function (node) {
-				_this2._drawNode(node, _Canvas2.default.colours.start);
+				_this2._drawNode(node, _this2.canvas.colours.start);
 			});
 
 			this.graph.endNodes.forEach(function (node) {
-				_this2._drawNode(node, _Canvas2.default.colours.end);
+				_this2._drawNode(node, _this2.canvas.colours.end);
 			});
 
 			this.path.route.forEach(function (node) {
-				_Canvas2.default.drawLine(node.x1, node.y1, node.x2, node.y2);
+				_this2.canvas.drawLine(node.x1, node.y1, node.x2, node.y2);
 			});
 		}
 	}, {
@@ -549,7 +541,7 @@ var Dijkstra = function (_PathAlgorithm) {
 		value: function _drawNode(node, colour) {
 			var coords = node.theName.split(',');
 
-			_Canvas2.default.drawSquare(coords[0], coords[1], colour);
+			this.canvas.drawSquare(coords[0], coords[1], colour);
 		}
 	}, {
 		key: '_backTrack',
@@ -665,7 +657,7 @@ var Dijkstra = function (_PathAlgorithm) {
 }(_PathAlgorithm3.default);
 
 exports.default = Dijkstra;
-},{"../Canvas/Canvas":1,"./PathAlgorithm":10}],9:[function(require,module,exports){
+},{"./PathAlgorithm":10}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -1,7 +1,7 @@
 export default class Canvas
 {
-	static init() {
-		this.c = document.getElementById('main-canvas');
+	constructor(elementId) {
+		this.c = document.getElementById(elementId);
 		this.c.width = window.innerWidth;
 		this.c.height = window.innerHeight;
 		this.ctx = this.c.getContext('2d');
@@ -21,7 +21,7 @@ export default class Canvas
 	}
 
 
-	static drawSquare(x, y, colour) {
+	drawSquare(x, y, colour) {
 		let posX = this.posX * this.scaleFactor;
 		let posY = this.posY * this.scaleFactor;
 		x *= this.scaleFactor;
@@ -35,7 +35,7 @@ export default class Canvas
 		this.ctx.fillRect(startX, startY, width, height);
 	}
 
-	static drawLine(x1, y1, x2, y2) {
+	drawLine(x1, y1, x2, y2) {
 		let posX = this.posX * this.scaleFactor;
 		let posY = this.posY * this.scaleFactor;
 		x1 = (x1 * this.scaleFactor) + (this.scaleFactor / 2);
@@ -55,7 +55,7 @@ export default class Canvas
 		this.ctx.stroke();
 	}
 
-	static clear() {
+	clear() {
 		this.ctx.clearRect(0, 0, this.c.width, this.c.height);
 	}
 }

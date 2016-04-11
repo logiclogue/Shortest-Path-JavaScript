@@ -7,12 +7,11 @@ import Map from './Map'
 export default class Main
 {
 	constructor() {
-		Canvas.init();
-
+		let canvas = new Canvas('main-canvas');
 		let graph = new Graph();
-		let map = new Map();
-		let dijkstra = new Dijkstra();
-		let scroll = new Scroll(Canvas);
+		let map = new Map(canvas);
+		let dijkstra = new Dijkstra(undefined, canvas);
+		let scroll = new Scroll(canvas);
 
 		for (let x = 0; x < map.maxLength; x += 1) {
 			for (let y = 0; y < map.maxLength; y += 1) {

@@ -1,8 +1,8 @@
 export default class Scroll
 {
-    constructor(canvas) {
+    constructor(canvas, element) {
         this.canvas = canvas;
-        this.element = canvas.c;
+        this.element = canvas.c || element;
         this.startX = 0;
         this.startY = 0;
         this.isMoving = false;

@@ -1,16 +1,16 @@
-import Canvas from './Canvas/Canvas'
 import Edge from './Graph/Edge'
 
 export default class Map
 {
-	constructor() {
+	constructor(canvas) {
+		this.canvas = canvas;
 		this.world = [];
 		this.maxLength = 20;
 		this.colourIndex = [
-			Canvas.colours.theDefault,
-			Canvas.colours.wall,
-			Canvas.colours.start,
-			Canvas.colours.end
+			this.canvas.colours.theDefault,
+			this.canvas.colours.wall,
+			this.canvas.colours.start,
+			this.canvas.colours.end
 		];
 
 		this._populateMap();
@@ -61,11 +61,11 @@ export default class Map
 	draw() {
 		let colourIndex = this.colourIndex;
 
-		Canvas.clear();
+		this.canvas.clear();
 
 		this.world.forEach((row, x) => {
 			row.forEach((cell, y) => {
-				Canvas.drawSquare(x, y, colourIndex[cell]);
+				this.canvas.drawSquare(x, y, colourIndex[cell]);
 			});
 		});
 	}
