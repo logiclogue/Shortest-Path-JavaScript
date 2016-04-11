@@ -8,7 +8,8 @@ export default class Canvas
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.scaleFactor = 40;
+		this.zoom = 32;
+		this.scaleFactor = Math.pow(2, this.zoom);
 		this.posX = 0;
 		this.posY = 0;
 
@@ -18,6 +19,14 @@ export default class Canvas
 			theDefault: '#DDDDDD',
 			wall: '#000000'
 		}
+	}
+
+
+	set zoom(value) {
+		debugger;
+		this.scaleFactor = Math.pow(2, value);
+
+		return value;
 	}
 
 

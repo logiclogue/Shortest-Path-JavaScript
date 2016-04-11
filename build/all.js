@@ -20,7 +20,8 @@ var Canvas = function () {
 		this.width = this.c.width;
 		this.height = this.c.height;
 
-		this.scaleFactor = 40;
+		this.zoom = 32;
+		this.scaleFactor = Math.pow(2, this.zoom);
 		this.posX = 0;
 		this.posY = 0;
 
@@ -72,6 +73,14 @@ var Canvas = function () {
 		key: 'clear',
 		value: function clear() {
 			this.ctx.clearRect(0, 0, this.c.width, this.c.height);
+		}
+	}, {
+		key: 'zoom',
+		set: function set(value) {
+			debugger;
+			this.scaleFactor = Math.pow(2, value);
+
+			return value;
 		}
 	}]);
 
@@ -135,8 +144,8 @@ var Scroll = function () {
         key: '_mousemove',
         value: function _mousemove(e) {
             if (this.isMoving) {
-                this.canvas.posX -= (this.startX - e.pageX) / this.canvas.scaleFactor;
-                this.canvas.posY -= (this.startY - e.pageY) / this.canvas.scaleFactor;
+                this.canvas.posX -= (this.startX - e.pageX) / this.canvas.zoom;
+                this.canvas.posY -= (this.startY - e.pageY) / this.canvas.zoom;
             }
 
             this.startX = e.pageX;
@@ -147,8 +156,9 @@ var Scroll = function () {
         value: function _zoom(e) {
             e.preventDefault();
 
-            this.canvas.scaleFactor += e.wheelDelta / 100;
-            this.canvas.scaleFactor = Math.round(this.canvas.scaleFactor);
+            console.log(this.canvas.zoom);
+            this.canvas.zoom = this.canvas.zoom + e.wheelDelta;
+            this.canvas.zoom = Math.round(this.canvas.zoom);
         }
     }]);
 
