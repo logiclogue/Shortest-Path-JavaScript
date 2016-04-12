@@ -322,8 +322,16 @@ var Main = function Main() {
 	map.convertToGraph(graph);
 	dijkstra.selectGraph(graph);
 
+	var index = 0;
+	var speed = 1 / 0.01;
+
 	setInterval(function () {
-		dijkstra.step();
+		index += 1;
+
+		if (index % speed === 0) {
+			dijkstra.step();
+		}
+
 		map.draw();
 		dijkstra.draw();
 	}, 1);

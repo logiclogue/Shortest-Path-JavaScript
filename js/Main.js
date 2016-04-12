@@ -27,8 +27,16 @@ export default class Main
 		map.convertToGraph(graph);
 		dijkstra.selectGraph(graph);
 
+		let index = 0;
+		let speed = 1 / 0.01;
+
 		setInterval(() => {
-			dijkstra.step();
+			index += 1;
+
+			if (index % speed === 0) {
+				dijkstra.step();
+			}
+
 			map.draw();
 			dijkstra.draw();
 		}, 1);
