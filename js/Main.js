@@ -3,6 +3,7 @@ import Canvas from './Canvas/Canvas'
 import Scroll from './Canvas/Scroll'
 import Graph from './Graph/Graph'
 import Map from './Map'
+import { Random } from'./Generator/Generator'
 
 export default class Main
 {
@@ -12,23 +13,15 @@ export default class Main
 		let map = new Map(canvas);
 		let dijkstra = new DijkstraDraw(undefined, canvas);
 		let scroll = new Scroll(canvas);
+		let randomGen = new Random(map);
 
-		for (let x = 0; x < map.maxLength; x += 1) {
-			for (let y = 0; y < map.maxLength; y += 1) {
-				if (Math.random() < 0.5) {
-					map.world[x][y] = 1;
-				}
-			}
-		}
-
-		map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
-		map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 3;
+		randomGen.run();
 
 		map.convertToGraph(graph);
 		dijkstra.selectGraph(graph);
 
 		let index = 0;
-		let speed = 1 / 0.01;
+		let speed = 1 / 0.2;
 
 		setInterval(() => {
 			index += 1;

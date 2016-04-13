@@ -166,6 +166,60 @@ var Scroll = function () {
 
 exports.default = Scroll;
 },{}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Random = undefined;
+
+var _Random = require('./Random.js');
+
+var _Random2 = _interopRequireDefault(_Random);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.Random = _Random2.default;
+},{"./Random.js":4}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+				value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Random = function () {
+				function Random(map, consistency) {
+								_classCallCheck(this, Random);
+
+								this.map = map;
+								this.consistency = consistency || 0.5;
+				}
+
+				_createClass(Random, [{
+								key: "run",
+								value: function run() {
+												for (var x = 0; x < this.map.maxLength; x += 1) {
+																for (var y = 0; y < this.map.maxLength; y += 1) {
+																				if (Math.random() < this.consistency) {
+																								this.map.world[x][y] = 1;
+																				}
+																}
+												}
+
+												this.map.world[Math.floor(Math.random() * this.map.maxLength)][Math.floor(Math.random() * this.map.maxLength)] = 2;
+												this.map.world[Math.floor(Math.random() * this.map.maxLength)][Math.floor(Math.random() * this.map.maxLength)] = 3;
+								}
+				}]);
+
+				return Random;
+}();
+
+exports.default = Random;
+},{}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -182,7 +236,7 @@ var Edge = function Edge(endNode, val) {
 };
 
 exports.default = Edge;
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -238,7 +292,7 @@ var Graph = function () {
 }();
 
 exports.default = Graph;
-},{"./Edge":3,"./Node":5}],5:[function(require,module,exports){
+},{"./Edge":5,"./Node":7}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -268,7 +322,7 @@ var Node = function () {
 }();
 
 exports.default = Node;
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -295,6 +349,8 @@ var _Map = require('./Map');
 
 var _Map2 = _interopRequireDefault(_Map);
 
+var _Generator = require('./Generator/Generator');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -307,23 +363,15 @@ var Main = function Main() {
 	var map = new _Map2.default(canvas);
 	var dijkstra = new _DijkstraDraw2.default(undefined, canvas);
 	var scroll = new _Scroll2.default(canvas);
+	var randomGen = new _Generator.Random(map);
 
-	for (var x = 0; x < map.maxLength; x += 1) {
-		for (var y = 0; y < map.maxLength; y += 1) {
-			if (Math.random() < 0.5) {
-				map.world[x][y] = 1;
-			}
-		}
-	}
-
-	map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 2;
-	map.world[Math.floor(Math.random() * map.maxLength)][Math.floor(Math.random() * map.maxLength)] = 3;
+	randomGen.run();
 
 	map.convertToGraph(graph);
 	dijkstra.selectGraph(graph);
 
 	var index = 0;
-	var speed = 1 / 0.01;
+	var speed = 1 / 0.2;
 
 	setInterval(function () {
 		index += 1;
@@ -343,7 +391,7 @@ exports.default = Main;
 window.onload = function () {
 	var main = new Main();
 };
-},{"./Canvas/Canvas":1,"./Canvas/Scroll":2,"./Graph/Graph":4,"./Map":7,"./PathFinder/DijkstraDraw":9}],7:[function(require,module,exports){
+},{"./Canvas/Canvas":1,"./Canvas/Scroll":2,"./Generator/Generator":3,"./Graph/Graph":6,"./Map":9,"./PathFinder/DijkstraDraw":11}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -463,7 +511,7 @@ var Map = function () {
 }();
 
 exports.default = Map;
-},{"./Graph/Edge":3}],8:[function(require,module,exports){
+},{"./Graph/Edge":5}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -641,7 +689,7 @@ var Dijkstra = function (_PathAlgorithm) {
 }(_PathAlgorithm3.default);
 
 exports.default = Dijkstra;
-},{"./PathAlgorithm":11}],9:[function(require,module,exports){
+},{"./PathAlgorithm":13}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -712,7 +760,7 @@ var DijkstraDraw = function (_Dijkstra) {
 }(_Dijkstra3.default);
 
 exports.default = DijkstraDraw;
-},{"./Dijkstra":8}],10:[function(require,module,exports){
+},{"./Dijkstra":10}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -746,7 +794,7 @@ var Path = function () {
 }();
 
 exports.default = Path;
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -790,4 +838,4 @@ var PathAlgorithm = function () {
 }();
 
 exports.default = PathAlgorithm;
-},{"./Path":10}]},{},[6]);
+},{"./Path":12}]},{},[8]);
