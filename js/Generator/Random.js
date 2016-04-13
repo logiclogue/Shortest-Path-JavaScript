@@ -1,7 +1,10 @@
-export default class Random
+import GeneratorAlgorithm from './GeneratorAlgorithm'
+
+export default class Random extends GeneratorAlgorithm
 {
     constructor(map, consistency) {
-        this.map = map;
+        super(map);
+
         this.consistency = consistency || 0.5;
     }
 

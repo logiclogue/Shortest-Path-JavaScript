@@ -3,7 +3,7 @@ import Canvas from './Canvas/Canvas'
 import Scroll from './Canvas/Scroll'
 import Graph from './Graph/Graph'
 import Map from './Map'
-import { Random } from'./Generator/Generator'
+import { Random } from'./Generator/Generators'
 
 export default class Main
 {
