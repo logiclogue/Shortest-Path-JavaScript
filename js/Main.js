@@ -25,13 +25,15 @@ export default class Main
 		let index = 0;
 		let speed = 1 / 0.2;
 
-		animLoop.loop = () => {
+		animLoop.updateFunction = () => {
 			index += 1;
 
 			if (index % speed === 0) {
 				dijkstra.step();
 			}
+		};
 
+		animLoop.drawFunction = () => {
 			map.draw();
 			dijkstra.draw();
 		};

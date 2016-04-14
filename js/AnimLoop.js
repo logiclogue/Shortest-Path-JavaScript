@@ -1,17 +1,26 @@
 export default class AnimLoop
 {
     constructor() {
-        this.interval;
+
     }
 
 
     run() {
-        this.interval = setInterval(this.loop.bind(this), 1);
+        this.loop();
     }
 
     stop() {
         clearInterval(this.interval);
     }
 
-    loop() {}
+    loop(timestamp) {
+        requestAnimationFrame(this.loop.bind(this));
+
+        this.drawFunction();
+        this.updateFunction();
+    }
+
+    updateFunction () {}
+
+    drawFunction () {}
 }
