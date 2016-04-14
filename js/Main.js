@@ -3,6 +3,7 @@ import Canvas from './Canvas/Canvas'
 import Scroll from './Canvas/Scroll'
 import Graph from './Graph/Graph'
 import Map from './Map'
+import AnimLoop from './AnimLoop'
 import { Random } from'./Generator/Generators'
 
 export default class Main
@@ -14,6 +15,7 @@ export default class Main
 		let dijkstra = new DijkstraDraw(undefined, canvas);
 		let scroll = new Scroll(canvas);
 		let randomGen = new Random(map);
+		let animLoop = new AnimLoop();
 
 		randomGen.run();
 
@@ -23,7 +25,7 @@ export default class Main
 		let index = 0;
 		let speed = 1 / 0.2;
 
-		setInterval(() => {
+		animLoop.loop = () => {
 			index += 1;
 
 			if (index % speed === 0) {
@@ -32,7 +34,9 @@ export default class Main
 
 			map.draw();
 			dijkstra.draw();
-		}, 1);
+		};
+
+		animLoop.run();
 	}
 }
 
