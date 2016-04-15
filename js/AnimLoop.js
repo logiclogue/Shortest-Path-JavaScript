@@ -14,7 +14,12 @@ export default class AnimLoop
     }
 
     loop(timestamp) {
-        requestAnimationFrame(this.loop.bind(this));
+        if (window.requestAnimationFrame) {
+            requestAnimationFrame(this.loop.bind(this));
+        }
+        else {
+            setTimeout(this.loop(Date.now()), 1);
+        }
 
         this.drawFunction();
         this.updateFunction();
