@@ -1,31 +1,39 @@
 export default class AnimLoop
 {
     constructor() {
-
+        this.now;
+        this.last;
+        this.dt;
+        this.step = 1 / 60;
     }
 
 
     run() {
-        this.loop();
+        this._loop();
     }
 
-    stop() {
-        clearInterval(this.interval);
-    }
+    _loop() {
+        requestAnimationFrame(this._loop.bind(this));
 
-    loop(timestamp) {
-        if (window.requestAnimationFrame) {
-            requestAnimationFrame(this.loop.bind(this));
-        }
-        else {
-            setTimeout(this.loop(Date.now()), 1);
+        this.now = this._timestamp();
+        this.dt = Math.min(1, (this.now - this.last) / 1000);
+
+        while (this.dt > this.step) {
+            this.dt = this.dt - this.step;
+
+            this.updateFunction();
         }
 
         this.drawFunction();
-        this.updateFunction();
+
+        this.last = this.now;
     }
 
-    updateFunction () {}
+    _timestamp() {
+        return Date.now();
+    }
 
-    drawFunction () {}
+    drawFunction() {}
+
+    updateFunction() {}
 }
