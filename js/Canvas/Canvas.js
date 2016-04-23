@@ -17,7 +17,7 @@ export default class Canvas
 			start: '#00FF00',
 			end: '#FF0000',
 			theDefault: '#DDDDDD',
-			wall: '#000000'
+			wall: '#303030'
 		}
 	}
 
@@ -67,6 +67,8 @@ export default class Canvas
 	}
 
 	clear() {
-		this.ctx.clearRect(0, 0, this.c.width, this.c.height);
+		this.ctx.fillStyle = this.colours.wall;
+
+		this.ctx.fillRect(0, 0, this.c.width, this.c.height);
 	}
 }
