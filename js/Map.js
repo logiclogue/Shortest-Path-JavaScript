@@ -1,4 +1,5 @@
 import Edge from './Graph/Edge'
+import Array2D from'./Array2D'
 
 export default class Map
 {
