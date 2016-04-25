@@ -19,8 +19,6 @@ export default class Main
 
 		randomGen.run();
 
-		console.log(map.world[0][0]);
-
 		map.convertToGraph(graph);
 		dijkstra.selectGraph(graph);
 

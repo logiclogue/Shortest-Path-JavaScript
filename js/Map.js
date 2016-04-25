@@ -3,9 +3,15 @@ import Array2D from'./Array2D'
 
 export default class Map
 {
+	/*
+	 * 0 = Nothing
+	 * 1 = Wall
+	 * 2 = Start
+	 * 3 = End
+	 */
 	constructor(canvas) {
 		this.canvas = canvas;
-		this.world = [];
+		this.world = new Array2D(1);
 		this.maxLength = 20;
 		this.colourIndex = [
 			this.canvas.colours.theDefault,
@@ -13,32 +19,23 @@ export default class Map
 			this.canvas.colours.start,
 			this.canvas.colours.end
 		];
-
-		this._populateMap();
 	}
 
 
 	convertToGraph(graph) {
-		this._forEachCell((x, y) => {
-			let cell = this.world[x][y];
+		this.world.forEachCell((x, y, cell) => {
 			let edges = [];
 
 			// Checks every square around the cell
 			for (let x1 = x - 1; x1 < x + 2; x1 += 1) {
 				for (let y1 = y - 1; y1 < y + 2; y1 += 1) {
-					try {
-						let isNotCentre = x1 !== x || y1 !== y;
-						let isNotWall = this.world[x1][y1] !== 1;
-						let isInWorld = x1 >= 0 && y1 >= 0 && x1 < this.maxLength && y1 < this.maxLength;
+					let isNotCentre = x1 !== x || y1 !== y;
+					let isNotWall = this.world.softGet(x1, y1) !== 1;
 
-						if (isNotCentre && isNotWall && isInWorld) {
-							let distance = Math.sqrt(Math.pow(x1 - x, 2) + Math.pow(y1 - y, 2));
+					if (isNotCentre && isNotWall) {
+						let distance = Math.sqrt(Math.pow(x1 - x, 2) + Math.pow(y1 - y, 2));
 
-							edges.push(new Edge(x1 + ',' + y1, distance));
-						}
-					}
-					catch (e) {
-
+						edges.push(new Edge(x1 + ',' + y1, distance));
 					}
 				}
 			}
@@ -60,42 +57,10 @@ export default class Map
 	}
 
 	draw() {
-		let colourIndex = this.colourIndex;
-
 		this.canvas.clear();
 
-		this.world.forEach((row, x) => {
-			row.forEach((cell, y) => {
-				this.canvas.drawSquare(x, y, colourIndex[cell]);
-			});
+		this.world.forEachCell((x, y, cell) => {
+			this.canvas.drawSquare(x, y, this.colourIndex[cell]);
 		});
-	}
-
-
-	_forEachCell(callback) {
-		let max = this.maxLength;
-
-		for (let x = 0; x < max; x += 1) {
-			for (let y = 0; y < max; y += 1) {
-				callback(x, y);
-			}
-		}
-	}
-
-	_populateMap() {
-		/*
-		 * 0 = Nothing
-		 * 1 = Wall
-		 * 2 = Start
-		 * 3 = End
-		 */
-
-		for (let x = 0; x < this.maxLength; x += 1) {
-			this.world[x] = [];
-
-			for (let y = 0; y < this.maxLength; y += 1) {
-				this.world[x][y] = 0;
-			}
-		}
 	}
 }
