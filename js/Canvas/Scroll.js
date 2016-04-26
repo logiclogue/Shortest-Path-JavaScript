@@ -1,6 +1,10 @@
-export default class Scroll
+import Event from './Event'
+
+export default class Scroll extends Event
 {
     constructor(canvas, element) {
+        super();
+
         this.canvas = canvas;
         this.element = canvas.c || element;
         this.startX = 0;
@@ -27,6 +31,8 @@ export default class Scroll
 
 
     _mousedown(e) {
+        console.log(e.clientX);
+
         this.isMoving = true;
         this.startX = e.pageX;
         this.startY = e.pageY;
