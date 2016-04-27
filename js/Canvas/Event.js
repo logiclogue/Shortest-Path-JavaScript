@@ -4,7 +4,7 @@ export default class Event
 
 
     constructor() {
-
+        Event.events.push(this);
     }
 
 
@@ -12,10 +12,6 @@ export default class Event
 
     removeEvents() {}
 
-
-    static addEvent(event) {
-        this.events.push(event);
-    }
 
     static setAllEvents() {
 
