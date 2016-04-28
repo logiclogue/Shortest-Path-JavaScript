@@ -18,7 +18,7 @@ var paths = {
 
 // JavaScript tasks
 gulp.task('javascript', function () {
-	browserify('./js/Main.js')
+	return browserify('./js/Main.js')
 		.transform('babelify', {
 			presets: ['es2015'],
             plugins: ['transform-class-properties'],

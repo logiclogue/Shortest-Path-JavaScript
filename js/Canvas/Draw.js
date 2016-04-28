@@ -8,7 +8,7 @@ export default class Draw extends Event
     constructor() {
         super();
 
-        let elements  = new Elements();
+        let elements = new Elements();
 
         this.canvas = canvas.c;
         this.element = elements.get('tool-draw');
