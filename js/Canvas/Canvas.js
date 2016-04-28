@@ -1,7 +1,11 @@
+import Elements from '../Elements.js'
+
 export default class Canvas
 {
 	constructor(elementId) {
-		this.c = document.getElementById(elementId);
+		let elements = new Elements();
+
+		this.c = elements.get(elementId);
 		this.c.width = window.innerWidth;
 		this.c.height = window.innerHeight;
 		this.ctx = this.c.getContext('2d');

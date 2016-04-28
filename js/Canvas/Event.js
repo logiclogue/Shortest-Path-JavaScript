@@ -14,10 +14,14 @@ export default class Event
 
 
     static setAllEvents() {
-
+        Event.events.forEach((event) => {
+            event.setEvents();
+        });
     }
 
     static removeAllEvents() {
-
+        Event.events.forEach((event) => {
+            event.removeEvents();
+        });
     }
 }

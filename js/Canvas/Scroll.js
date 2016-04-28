@@ -11,28 +11,33 @@ export default class Scroll extends Event
         this.startY = 0;
         this.isMoving = false;
 
+        this._mousedownBind = this._mousedown.bind(this);
+        this._mouseupBind = this._mouseup.bind(this);
+        this._mousemoveBind = this._mousemove.bind(this);
+        this._zoomBind = this._zoom.bind(this);
+
         this.setEvents();
     }
 
 
     setEvents() {
-        this.element.addEventListener('mousedown', this._mousedown.bind(this));
-        this.element.addEventListener('mouseup', this._mouseup.bind(this));
-        this.element.addEventListener('mousemove', this._mousemove.bind(this));
-        this.element.addEventListener('wheel', this._zoom.bind(this));
+        this.element.addEventListener('mousedown', this._mousedownBind);
+        this.element.addEventListener('mouseup', this._mouseupBind);
+        this.element.addEventListener('mousemove', this._mousemoveBind);
+        this.element.addEventListener('wheel', this._zoomBind);
     }
 
     removeEvents() {
-        this.element.removeEventListener('mousedown', this._mousedown.bind(this));
-        this.element.removeEventListener('mouseup', this._mouseup.bind(this));
-        this.element.removeEventListener('mouseMove', this._mousemove.bind(this));
-        this.element.removeEventListener('wheel', this._zoom.bind(this));
+        console.log('here');
+
+        this.element.removeEventListener('mousedown', this._mousedownBind);
+        this.element.removeEventListener('mouseup', this._mouseupBind);
+        this.element.removeEventListener('mousemove', this._mousemoveBind);
+        this.element.removeEventListener('wheel', this._zoomBind);
     }
 
 
     _mousedown(e) {
-        console.log(e.clientX);
-
         this.isMoving = true;
         this.startX = e.pageX;
         this.startY = e.pageY;
