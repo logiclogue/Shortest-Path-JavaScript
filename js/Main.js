@@ -1,7 +1,7 @@
 import DijkstraDraw from './PathFinder/DijkstraDraw'
 import Canvas from './Canvas/Canvas'
 import Scroll from './Canvas/Scroll'
-import Toolbar from './Canvas/Toolbar'
+import Toolbar from './Toolbar/Toolbar'
 import Graph from './Graph/Graph'
 import Map from './Map'
 import AnimLoop from './AnimLoop'
@@ -28,7 +28,7 @@ export default class Main
 		dijkstra.selectGraph(graph);
 
 		let index = 0;
-		let speed = 1 / 0.2;
+		let speed = 1;
 
 		animLoop.updateFunction = () => {
 			index += 1;

@@ -1,4 +1,4 @@
-import Event from './Event'
+import Event from '../Canvas/Event'
 import Elements from '../Elements'
 import { canvas } from '../Main'
 

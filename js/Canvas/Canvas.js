@@ -37,34 +37,27 @@ export default class Canvas
 
 
 	drawSquare(x, y, colour) {
-		let posX = this.posX * this.scaleFactor;
-		let posY = this.posY * this.scaleFactor;
-		x *= this.scaleFactor;
-		y *= this.scaleFactor;
-		let startX = Math.round(x + posX) + (this.width / 2);
-		let startY = Math.round(y + posY) + (this.height / 2);
+		let start = this.convertCoordToPoint(x, y);
 		let width = this.scaleFactor;
 		let height = this.scaleFactor;
 
 		this.ctx.fillStyle = colour || this.colours.theDefault;
-		this.ctx.fillRect(startX, startY, width, height);
+		this.ctx.fillRect(start.x, start.y, width, height);
 	}
 
 	drawLine(x1, y1, x2, y2) {
-		let posX = this.posX * this.scaleFactor;
-		let posY = this.posY * this.scaleFactor;
-		x1 = (x1 * this.scaleFactor) + (this.scaleFactor / 2);
-		x2 = (x2 * this.scaleFactor) + (this.scaleFactor / 2);
-		y1 = (y1 * this.scaleFactor) + (this.scaleFactor / 2);
-		y2 = (y2 * this.scaleFactor) + (this.scaleFactor / 2);
-		let startX = x1 + posX + (this.width / 2);
-		let startY = y1 + posY + (this.height / 2);
-		let endX = x2 + posX + (this.width / 2);
-		let endY = y2 + posY + (this.height / 2);
+		let start = this.convertCoordToPoint(x1, y1);
+		let end = this.convertCoordToPoint(x2, y2);
+		let halfScaleFactor = this.scaleFactor / 2;
+
+		start.x += halfScaleFactor;
+		start.y += halfScaleFactor;
+		end.x += halfScaleFactor;
+		end.y += halfScaleFactor;
 
 		this.ctx.beginPath();
-		this.ctx.moveTo(startX, startY);
-		this.ctx.lineTo(endX, endY);
+		this.ctx.moveTo(start.x, start.y);
+		this.ctx.lineTo(end.x, end.y);
 		this.ctx.lineWidth = this.scaleFactor / 5;
 		this.ctx.lineCap = 'round';
 		this.ctx.stroke();
@@ -74,5 +67,23 @@ export default class Canvas
 		this.ctx.fillStyle = this.colours.wall;
 
 		this.ctx.fillRect(0, 0, this.c.width, this.c.height);
+	}
+
+	convertCoordToPoint(x, y) {
+		let posX = this.posX * this.scaleFactor;
+		let posY = this.posY * this.scaleFactor;
+		x = (x * this.scaleFactor) + (this.scaleFactor / 2);
+		y = (y * this.scaleFactor) + (this.scaleFactor / 2);
+		let startX = Math.round(x + posX) + (this.width / 2);
+		let startY = Math.round(y + posY) + (this.height / 2);
+
+		return {
+			x: startX,
+			y: startY
+		}
+	}
+
+	convertPointToCoord() {
+
 	}
 }

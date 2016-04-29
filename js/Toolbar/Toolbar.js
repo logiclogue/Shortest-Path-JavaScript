@@ -1,5 +1,5 @@
 import Elements from '../Elements'
-import Draw from './Draw.js'
+import Draw from './Draw'
 
 
 export default class Toolbar
