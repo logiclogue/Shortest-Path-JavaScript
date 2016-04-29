@@ -29,6 +29,8 @@ export default class Draw extends Event
 
 
     _drawWall(e) {
-        console.log(e);
+        let coords = canvas .convertPointToCoord(e.pageX, e.pageY);
+
+        console.log(coords.x, coords.y);
     }
 }

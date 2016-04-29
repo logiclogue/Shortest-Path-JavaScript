@@ -69,21 +69,32 @@ export default class Canvas
 		this.ctx.fillRect(0, 0, this.c.width, this.c.height);
 	}
 
+
 	convertCoordToPoint(x, y) {
-		let posX = this.posX * this.scaleFactor;
-		let posY = this.posY * this.scaleFactor;
-		x = (x * this.scaleFactor) + (this.scaleFactor / 2);
-		y = (y * this.scaleFactor) + (this.scaleFactor / 2);
-		let startX = Math.round(x + posX) + (this.width / 2);
-		let startY = Math.round(y + posY) + (this.height / 2);
+		let pos = this._getPos();
+
+		x *= this.scaleFactor;
+		y *= this.scaleFactor;
 
 		return {
-			x: startX,
-			y: startY
+			x: Math.round(x + pos.x) + (this.width / 2),
+			y: Math.round(y + pos.y) + (this.height / 2)
 		}
 	}
 
-	convertPointToCoord() {
+	convertPointToCoord(x, y) {
+		let pos = this._getPos();
 
+		return {
+			x: Math.floor((x - pos.x - (this.width / 2)) / this.scaleFactor),
+			y: Math.floor((y - pos.y - (this.height / 2)) / this.scaleFactor)
+		}
+	}
+
+	_getPos() {
+		return {
+			x: this.posX * this.scaleFactor,
+			y: this.posY * this.scaleFactor
+		}
 	}
 }

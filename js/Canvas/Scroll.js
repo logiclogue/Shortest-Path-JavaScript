@@ -28,8 +28,6 @@ export default class Scroll extends Event
     }
 
     removeEvents() {
-        console.log('here');
-
         this.element.removeEventListener('mousedown', this._mousedownBind);
         this.element.removeEventListener('mouseup', this._mouseupBind);
         this.element.removeEventListener('mousemove', this._mousemoveBind);
