@@ -53,6 +53,6 @@ export default class Draw extends Event
         animLoop.pause = true;
 
         map.world.set(coords.x, coords.y, this.colour);
-        canvas.drawSquare(coords.x, coords.y, canvas.colours.wall);
+        canvas.drawSquare(coords.x, coords.y, map.colourIndex[this.colour]);
     }
 }
