@@ -5,6 +5,7 @@ export default class AnimLoop
         this.last;
         this.dt;
         this.step = 1 / 60;
+        this.pause = false;
     }
 
 
@@ -12,8 +13,15 @@ export default class AnimLoop
         this._loop();
     }
 
+    drawFunction() {}
+
+    updateFunction() {}
+    
+
     _loop() {
-        requestAnimationFrame(this._loop.bind(this));
+        if (!this.pause) {
+            requestAnimationFrame(this._loop.bind(this));
+        }
 
         this.now = this._timestamp();
         this.dt = Math.min(1, (this.now - this.last) / 1000);
@@ -32,8 +40,4 @@ export default class AnimLoop
     _timestamp() {
         return Date.now();
     }
-
-    drawFunction() {}
-
-    updateFunction() {}
 }

@@ -1,6 +1,6 @@
 import Event from '../Canvas/Event'
 import Elements from '../Elements'
-import { canvas } from '../Main'
+import { canvas, map, animLoop } from '../Main'
 
 
 export default class Draw extends Event
@@ -12,6 +12,8 @@ export default class Draw extends Event
 
         this.canvas = canvas.c;
         this.element = elements.get('tool-draw');
+        this.mousedown = false;
+        this._drawBind = this._draw.bind(this);
 
         this.element.addEventListener('mousedown', this.setEvents.bind(this));
     }
@@ -20,17 +22,36 @@ export default class Draw extends Event
     setEvents() {
         Event.removeAllEvents();
 
-        this.canvas.addEventListener('click', this._drawWall);
+        this.canvas.addEventListener('mousedown', this._drawBind);
+        this.canvas.addEventListener('mousemove', this._drawBind);
+        this.canvas.addEventListener('mouseup', this._drawBind);
     }
 
     removeEvents() {
-        this.canvas.removeEventListener('click', this._drawWall);
+        this.canvas.removeEventListener('mousedown', this._drawBind);
+        this.canvas.removeEventListener('mousemove', this._drawBind);
+        this.canvas.removeEventListener('mouseup', this._drawBind);
     }
 
 
-    _drawWall(e) {
+    _draw(e) {
+        if (e.type === 'mousedown') {
+            this.mousedown = true;
+        }
+        else if (e.type === 'mousemove' && !this.mousedown) {
+            return;
+        }
+        else if (e.type === 'mouseup') {
+            this.mousedown = false;
+
+            return;
+        }
+
         let coords = canvas .convertPointToCoord(e.pageX, e.pageY);
 
-        console.log(coords.x, coords.y);
+        animLoop.pause = true;
+
+        map.world.set(coords.x, coords.y, 1);
+        canvas.drawSquare(coords.x, coords.y, canvas.colours.wall);
     }
 }

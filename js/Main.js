@@ -9,17 +9,19 @@ import { Random } from'./Generator/Generators'
 
 
 export let canvas;
+export let map;
+export let animLoop;
 
 export default class Main
 {
 	constructor() {
 		canvas = new Canvas('main-canvas');
 		let graph = new Graph();
-		let map = new Map(canvas);
+		map = new Map(canvas);
 		let dijkstra = new DijkstraDraw(undefined, canvas);
 		let scroll = new Scroll(canvas);
 		let randomGen = new Random(map);
-		let animLoop = new AnimLoop();
+		animLoop = new AnimLoop();
 		let toolbar = new Toolbar();
 
 		randomGen.run();
