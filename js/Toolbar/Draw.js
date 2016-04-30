@@ -5,14 +5,15 @@ import { canvas, map, animLoop } from '../Main'
 
 export default class Draw extends Event
 {
-    constructor() {
+    constructor(elementId, colour) {
         super();
 
         let elements = new Elements();
 
         this.canvas = canvas.c;
-        this.element = elements.get('tool-draw');
+        this.element = elements.get(elementId);
         this.mousedown = false;
+        this.colour = colour;
         this._drawBind = this._draw.bind(this);
 
         this.element.addEventListener('mousedown', this.setEvents.bind(this));
@@ -47,11 +48,11 @@ export default class Draw extends Event
             return;
         }
 
-        let coords = canvas .convertPointToCoord(e.pageX, e.pageY);
+        let coords = canvas.convertPointToCoord(e.pageX, e.pageY);
 
         animLoop.pause = true;
 
-        map.world.set(coords.x, coords.y, 1);
+        map.world.set(coords.x, coords.y, this.colour);
         canvas.drawSquare(coords.x, coords.y, canvas.colours.wall);
     }
 }

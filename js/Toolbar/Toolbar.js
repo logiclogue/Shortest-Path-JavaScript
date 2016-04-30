@@ -1,10 +1,10 @@
 import Elements from '../Elements'
-import Draw from './Draw'
+import DrawWall from './DrawWall'
 
 
 export default class Toolbar
 {
     constructor() {
-        this.toolDraw = new Draw();
+        this.toolDraw = new DrawWall();
     }
 }
