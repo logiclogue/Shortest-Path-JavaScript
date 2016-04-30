@@ -26,12 +26,16 @@ export default class Draw extends Event
         this.canvas.addEventListener('mousedown', this._drawBind);
         this.canvas.addEventListener('mousemove', this._drawBind);
         this.canvas.addEventListener('mouseup', this._drawBind);
+
+        this.element.className = 'down';
     }
 
     removeEvents() {
         this.canvas.removeEventListener('mousedown', this._drawBind);
         this.canvas.removeEventListener('mousemove', this._drawBind);
         this.canvas.removeEventListener('mouseup', this._drawBind);
+
+        this.element.className = '';
     }
 
 
