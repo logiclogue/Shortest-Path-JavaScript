@@ -16,11 +16,13 @@ export default class AnimLoop
     drawFunction() {}
 
     updateFunction() {}
-    
+
 
     _loop() {
-        if (!this.pause) {
-            requestAnimationFrame(this._loop.bind(this));
+        requestAnimationFrame(this._loop.bind(this));
+
+        if (this.pause) {
+            return;
         }
 
         this.now = this._timestamp();

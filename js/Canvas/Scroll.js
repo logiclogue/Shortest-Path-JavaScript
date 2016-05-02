@@ -10,7 +10,6 @@ export default class Scroll extends Event
 
         this.canvas = canvas;
         this.canvasElement = canvas.c || element;
-        this.element = elements.get('tool-move');
         this.startX = 0;
         this.startY = 0;
         this.isMoving = false;
@@ -19,20 +18,14 @@ export default class Scroll extends Event
         this._mouseupBind = this._mouseup.bind(this);
         this._mousemoveBind = this._mousemove.bind(this);
         this._zoomBind = this._zoom.bind(this);
-
-        this.element.addEventListener('mousedown', this.setEvents.bind(this));
     }
 
 
     setEvents() {
-        Event.removeAllEvents();
-
         this.canvasElement.addEventListener('mousedown', this._mousedownBind);
         this.canvasElement.addEventListener('mouseup', this._mouseupBind);
         this.canvasElement.addEventListener('mousemove', this._mousemoveBind);
         this.canvasElement.addEventListener('wheel', this._zoomBind);
-
-        this.element.className = 'down';
     }
 
     removeEvents() {

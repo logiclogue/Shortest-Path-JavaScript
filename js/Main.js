@@ -10,12 +10,13 @@ import { Random } from'./Generator/Generators'
 export let canvas;
 export let map;
 export let animLoop;
+export let graph;
 
 export default class Main
 {
 	constructor() {
 		canvas = new Canvas('main-canvas');
-		let graph = new Graph();
+		graph = new Graph();
 		map = new Map(canvas);
 		let dijkstra = new DijkstraDraw(undefined, canvas);
 		let randomGen = new Random(map);
