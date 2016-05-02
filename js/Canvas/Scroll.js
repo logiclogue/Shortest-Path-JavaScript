@@ -1,12 +1,16 @@
 import Event from './Event'
+import Elements from '../Elements'
 
 export default class Scroll extends Event
 {
     constructor(canvas, element) {
         super();
 
+        let elements = new Elements();
+
         this.canvas = canvas;
-        this.element = canvas.c || element;
+        this.canvasElement = canvas.c || element;
+        this.element = elements.get('tool-move');
         this.startX = 0;
         this.startY = 0;
         this.isMoving = false;
@@ -16,22 +20,26 @@ export default class Scroll extends Event
         this._mousemoveBind = this._mousemove.bind(this);
         this._zoomBind = this._zoom.bind(this);
 
-        this.setEvents();
+        this.element.addEventListener('mousedown', this.setEvents.bind(this));
     }
 
 
     setEvents() {
-        this.element.addEventListener('mousedown', this._mousedownBind);
-        this.element.addEventListener('mouseup', this._mouseupBind);
-        this.element.addEventListener('mousemove', this._mousemoveBind);
-        this.element.addEventListener('wheel', this._zoomBind);
+        Event.removeAllEvents();
+
+        this.canvasElement.addEventListener('mousedown', this._mousedownBind);
+        this.canvasElement.addEventListener('mouseup', this._mouseupBind);
+        this.canvasElement.addEventListener('mousemove', this._mousemoveBind);
+        this.canvasElement.addEventListener('wheel', this._zoomBind);
+
+        this.element.className = 'down';
     }
 
     removeEvents() {
-        this.element.removeEventListener('mousedown', this._mousedownBind);
-        this.element.removeEventListener('mouseup', this._mouseupBind);
-        this.element.removeEventListener('mousemove', this._mousemoveBind);
-        this.element.removeEventListener('wheel', this._zoomBind);
+        this.canvasElement.removeEventListener('mousedown', this._mousedownBind);
+        this.canvasElement.removeEventListener('mouseup', this._mouseupBind);
+        this.canvasElement.removeEventListener('mousemove', this._mousemoveBind);
+        this.canvasElement.removeEventListener('wheel', this._zoomBind);
     }
 
 

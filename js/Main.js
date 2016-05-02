@@ -1,6 +1,5 @@
 import DijkstraDraw from './PathFinder/DijkstraDraw'
 import Canvas from './Canvas/Canvas'
-import Scroll from './Canvas/Scroll'
 import Toolbar from './Toolbar/Toolbar'
 import Graph from './Graph/Graph'
 import Map from './Map'
@@ -19,7 +18,6 @@ export default class Main
 		let graph = new Graph();
 		map = new Map(canvas);
 		let dijkstra = new DijkstraDraw(undefined, canvas);
-		let scroll = new Scroll(canvas);
 		let randomGen = new Random(map);
 		animLoop = new AnimLoop();
 		let toolbar = new Toolbar();
