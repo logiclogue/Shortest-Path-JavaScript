@@ -11,9 +11,18 @@ export default class ToolbarScroll extends ToolbarItem
         this.scroll = new Scroll(canvas);
     }
 
+    setEvents() {
+        super.setEvents();
+        this.scroll.setEvents();
+    }
+
+    removeEvents() {
+        super.removeEvents();
+        this.scroll.removeEvents();
+    }
+
 
     _clickEvent(e) {
         this.setEvents();
-        this.scroll.setEvents();
     }
 }

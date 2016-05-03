@@ -1,11 +1,8 @@
-import Event from './Event'
 import Elements from '../Elements'
 
-export default class Scroll extends Event
+export default class Scroll
 {
     constructor(canvas, element) {
-        super();
-
         let elements = new Elements();
 
         this.canvas = canvas;
