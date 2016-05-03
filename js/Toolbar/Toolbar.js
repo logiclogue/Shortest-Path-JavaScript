@@ -11,5 +11,7 @@ export default class Toolbar
         this.toolDraw = new DrawWall();
         this.toolErase = new Erase();
         this.toolScroll = new ToolbarScroll();
+
+        this.toolScroll._clickEvent();
     }
 }
