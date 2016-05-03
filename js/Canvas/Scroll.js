@@ -1,10 +1,6 @@
-import Elements from '../Elements'
-
 export default class Scroll
 {
     constructor(canvas, element) {
-        let elements = new Elements();
-
         this.canvas = canvas;
         this.canvasElement = canvas.c || element;
         this.startX = 0;
